@@ -1,104 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CTS E-Lost & Found</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - CTS E-Lost & Found</title>
+<link rel="stylesheet" href="style.css">
+<style>
+main.container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+form.auth-form {
+  background: var(--white);
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+.alt-link {
+  margin-top: 15px;
+  text-align: center;
+}
+@media (max-width: 500px) {
+  form.auth-form {
+    padding: 20px;
+  }
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+  }
+  nav ul li a {
+    width: 100%;
+    text-align: center;
+  }
+}
+</style>
 </head>
 <body>
-  
-  <header>
-    <div class="logo">
-      <img src="images/logo.webp" alt="CTS Logo">
-      <h1>CTS E-Lost & Found</h1>
-    </div>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/search.html">Search Items</a></li>
-        <li><a href="/login.html">Login</a></li> 
-        <li><a href="/register.html">Register</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  
-  <main class="container">
-    <h2>CTS E-Lost & Found</h2>
-    <p>A Digital Lost and Found Portal for the <strong>College of Technological Science – Cebu</strong></p>
-    <p class="tagline">Connecting our CTS-C community through lost and found items</p>
-
-  
-    <div class="cta-buttons">
-      <a href="/search.html" class="btn primary">Search Items</a>
-      <a href="/register.html" class="btn secondary">Get Started</a>
-    </div>
-
-
-    <section class="stats">
-      <div class="stats">
-  <div class="stat-box">
-    <h3>0</h3>
-    <p>Total Items</p>
-  </div>
-
-  <div class="stat-box">
-    <h3>0</h3>
-    <p>Lost Items</p>
-  </div>
-
-  <div class="stat-box">
-    <h3>0</h3>
-    <p>Found Items</p>
-  </div>
-
-  <div class="stat-box">
-    <h3>0</h3>
-    <p>Items Returned</p>
-  </div>
+<header>
+<div class="logo">
+  <img src="images/logo.webp" alt="CTS Logo">
+  <h1>CTS E-Lost & Found</h1>
 </div>
-    </section>
+<nav>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="search.html">Search Items</a></li>
+    <li><a href="login.html" class="active">Login</a></li>
+    <li><a href="register.html">Register</a></li>
+  </ul>
+</nav>
+</header>
 
-  
-    <section class="empty">
-      <p><strong>No Items Posted Yet</strong></p>
-      <p>Be the first to help the Texians community by reporting a lost or found item!</p>
-    </section>
+<main class="container">
+<div>
+  <h2>Login to Your Account</h2>
+  <p class="tagline">Welcome back! Please log in to continue.</p>
+  <form id="loginForm" class="auth-form">
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your CTS email" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    </div>
+    <button type="submit" class="btn primary">Login</button>
+    <p class="alt-link">Don't have an account? <a href="register.html">Register here</a></p>
+  </form>
+</div>
+</main>
 
-    
-    <section class="how-it-works">
-      <h2>How It Works</h2>
-      <div class="steps">
-        <div class="step">
-          <h3>1</h3>
-          <p><strong>Report Item</strong><br>Found something or lost an item? Create an account and report it with details and photos.</p>
-        </div>
-        <div class="step">
-          <h3>2</h3>
-          <p><strong>Search & Connect</strong><br>Browse through posted items and connect with other CTS-C community members.</p>
-        </div>
-        <div class="step">
-          <h3>3</h3>
-          <p><strong>Reunite Items</strong><br>Message item owners to arrange safe return and help reunite items with their owners.</p>
-        </div>
-      </div>
-    </section>
+<footer>
+<p>© 2025 CTS-C E-Lost & Found. All rights reserved.</p>
+</footer>
 
-  
-    <section class="join">
-      <h2>Join the CTS-C Community</h2>
-      <p>Help your fellow students and staff by joining our digital lost and found community.</p>
-      <div class="cta-buttons">
-        <a href="/register.html" class="btn primary">Create Account</a>
-        <a href="/login.html" class="btn secondary">Login</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 CTS-C E-Lost & Found. All rights reserved. Created by Chavez, Cody BSIT </p>
-  </footer>
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+  const user = users.find(u=>u.email===email && u.password===password);
+  if(user){
+    alert("✅ Login successful!");
+    window.location.href="index.html";
+  } else {
+    alert("❌ Invalid email or password!");
+  }
+});
+</script>
 </body>
 </html>
-
