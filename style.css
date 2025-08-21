@@ -246,3 +246,92 @@ footer {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* === RESPONSIVE MEDIA QUERIES === */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  nav ul li a {
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .container {
+    padding: 40px 20px;
+    margin: 30px 10px;
+  }
+
+  .container h2 {
+    font-size: 28px;
+  }
+
+  .container p {
+    font-size: 16px;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .step h3 {
+    font-size: 22px;
+  }
+
+  .join {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  header .logo h1 {
+    font-size: 18px;
+  }
+
+  .container h2 {
+    font-size: 24px;
+  }
+
+  .container p {
+    font-size: 14px;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .stat-box {
+    padding: 15px;
+    min-width: 120px;
+  }
+
+  .step {
+    padding: 15px;
+  }
+
+  .step h3 {
+    font-size: 20px;
+  }
+}
+
