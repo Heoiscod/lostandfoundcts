@@ -1,0 +1,248 @@
+/* === RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* === COLORS === */
+:root {
+  --blue-dark: #1e3a8a;   /* Deep navy blue */
+  --blue: #2563eb;        /* Bright modern blue */
+  --blue-light: #93c5fd;  /* Light blue */
+  --white: #ffffff;
+  --gray: #555;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* === BODY === */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, var(--white), var(--blue-light));
+  color: var(--gray);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* === HEADER === */
+header {
+  background: linear-gradient(to right, var(--blue-dark), var(--blue));
+  color: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 2px 8px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+header .logo img {
+  height: 50px;
+}
+
+header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* === NAVBAR === */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: var(--white);
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+nav ul li a:hover {
+  background: var(--white);
+  color: var(--blue-dark);
+}
+
+/* === MAIN CONTENT === */
+.container {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 60px 30px;
+  margin: 50px auto;
+  max-width: 900px;
+  text-align: center;
+  box-shadow: 0 6px 18px var(--shadow);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.container h2 {
+  font-size: 32px;
+  background: linear-gradient(90deg, var(--blue-dark), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 15px;
+}
+
+.container p {
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+.container .tagline {
+  margin-top: 15px;
+  font-style: italic;
+  color: var(--gray);
+}
+
+/* === CTA BUTTONS === */
+.cta-buttons {
+  margin: 25px 0;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn.primary {
+  background: linear-gradient(90deg, var(--blue-dark), var(--blue));
+  color: var(--white);
+}
+
+.btn.primary:hover {
+  opacity: 0.9;
+}
+
+.btn.secondary {
+  background: var(--white);
+  border: 2px solid var(--blue);
+  color: var(--blue);
+}
+
+.btn.secondary:hover {
+  background: var(--blue);
+  color: var(--white);
+}
+
+/* === STATS SECTION === */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  justify-content: le;
+}
+.stat-box {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 25px;
+  flex: 1;
+  min-width: 200px;
+  box-shadow: 0 2px 6px var(--shadow);
+  text-align: center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), 
+              box-shadow 0.35s ease; /* smoother easing */
+}
+
+.stat-box h3 {
+  font-size: 28px;
+  color: var(--blue);
+  margin-bottom: 5px;
+  transition: transform 0.35s ease; /* animate number too */
+}
+
+.stat-box p {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+/* Hover effect */
+.stat-box:hover {
+  transform: translateY(-8px) scale(1.03); /* lift + slight zoom */
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18),
+              0 0 22px rgba(0, 123, 255, 0.4); /* smooth glow */
+}
+
+.stat-box:hover h3 {
+  transform: scale(1.1); /* number pops slightly */
+}
+/* === HOW IT WORKS === */
+.how-it-works {
+  margin: 50px 0;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.step {
+  background: var(--white);
+  border: 1px solid var(--blue-light);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px var(--shadow);
+  text-align: center;
+}
+
+.step h3 {
+  font-size: 26px;
+  color: var(--blue);
+  margin-bottom: 10px;
+}
+.step:hover {
+  border-color: var(--blue); /* highlight border */
+  transform: translateY(-8px); /* lift up */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 
+              0 0 20px rgba(0, 123, 255, 0.4); /* subtle glow */
+}
+
+/* === JOIN SECTION === */
+.join {
+  margin: 50px 0;
+  padding: 30px;
+  background: linear-gradient(135deg, var(--blue-light), var(--white));
+  border-radius: 16px;
+  box-shadow: 0 2px 8px var(--shadow);
+  text-align: center;
+}
+
+/* === FOOTER === */
+footer {
+  background: linear-gradient(to right, var(--blue), var(--blue-dark));
+  color: var(--white);
+  text-align: center;
+  padding: 15px;
+  margin-top: auto;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
