@@ -1,128 +1,129 @@
-const express = require("express");
-const mysql = require("mysql2");
-const cors = require("cors");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search Items - CTS E-Lost & Found</title>
+<link rel="stylesheet" href="style.css">
+<style>
+main.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px 20px;
+}
+.search-box {
+  display: flex;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 30px;
+}
+.search-box input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px 0 0 8px;
+  outline: none;
+  font-size: 16px;
+}
+.search-box button {
+  padding: 12px 20px;
+  border: none;
+  background: var(--blue);
+  color: var(--white);
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.search-box button:hover { background: #1e3a8a; }
+.results { width: 100%; max-width: 400px; }
+.result-item {
+  background: var(--white);
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.result-item h3 { margin-bottom: 5px; }
+.result-item p { margin: 0; color: var(--gray); }
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// ✅ Secret key for JWT (keep this safe!)
-const JWT_SECRET = "your_secret_key_here";
-
-// ✅ MySQL connection
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "lost_and_found"
-});
-
-db.connect(err => {
-  if (err) {
-    console.error("Database connection failed:", err);
-    return;
+@media (max-width: 500px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
   }
-  console.log("✅ Connected to MySQL Database");
-});
-
-// ✅ Route: Test API
-app.get("/", (req, res) => {
-  res.send("Lost and Found System Backend is running ✅");
-});
-
-// ==================== USER AUTH ====================
-
-// ✅ Register Route
-app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ error: "All fields are required" });
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
   }
+  nav ul li a {
+    width: 100%;
+    text-align: center;
+  }
+  .search-box {
+    flex-direction: column;
+  }
+  .search-box input, .search-box button {
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">
+  <img src="images/logo.webp" alt="CTS Logo">
+  <h1>CTS E-Lost & Found</h1>
+</div>
+<nav>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="search.html" class="active">Search Items</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="register.html">Register</a></li>
+  </ul>
+</nav>
+</header>
 
-  // Hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
+<main class="container">
+<h2>Search Lost & Found Items</h2>
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search items (e.g., phone)">
+  <button id="searchBtn">Search</button>
+</div>
+<div class="results" id="results"></div>
+</main>
 
-  const sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-  db.query(sql, [username, hashedPassword], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Registration failed" });
-    }
-    res.json({ message: "User registered successfully ✅" });
+<footer>
+<p>© 2025 CTS-C E-Lost & Found. All rights reserved.</p>
+</footer>
+
+<script>
+const searchBtn = document.getElementById('searchBtn');
+const searchInput = document.getElementById('searchInput');
+const resultsDiv = document.getElementById('results');
+
+searchBtn.addEventListener('click', ()=>{
+  const query = searchInput.value.toLowerCase();
+  resultsDiv.innerHTML = '';
+  let items = JSON.parse(localStorage.getItem('lostFoundItems') || '[]');
+  let filtered = items.filter(item => item.name.toLowerCase().includes(query));
+  if(filtered.length===0){ resultsDiv.innerHTML='<p>No items found.</p>'; return; }
+  filtered.forEach(item=>{
+    const div = document.createElement('div');
+    div.classList.add('result-item');
+    div.innerHTML = `<h3>${item.name}</h3><p>${item.details}</p>`;
+    resultsDiv.appendChild(div);
   });
 });
-
-// ✅ Login Route
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  const sql = "SELECT * FROM users WHERE username = ?";
-  db.query(sql, [username], async (err, results) => {
-    if (err) return res.status(500).json({ error: "Database error" });
-
-    if (results.length === 0) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    const user = results[0];
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    // Generate JWT Token
-    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, {
-      expiresIn: "1h"
-    });
-
-    res.json({ message: "Login successful ✅", token });
-  });
-});
-
-// ==================== LOST & RETURN ITEMS ====================
-
-// ✅ Route: Add Lost Item
-app.post("/lost", (req, res) => {
-  const { item_name, description, location } = req.body;
-  const sql = "INSERT INTO lost_items (item_name, description, location) VALUES (?, ?, ?)";
-  db.query(sql, [item_name, description, location], (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ message: "Lost item added successfully ✅", id: result.insertId });
-  });
-});
-
-// ✅ Route: Add Returned Item
-app.post("/return", (req, res) => {
-  const { item_name, description, location } = req.body;
-  const sql = "INSERT INTO return_items (item_name, description, location) VALUES (?, ?, ?)";
-  db.query(sql, [item_name, description, location], (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ message: "Returned item recorded successfully ✅", id: result.insertId });
-  });
-});
-
-// ✅ Route: Fetch Lost Items
-app.get("/lost", (req, res) => {
-  db.query("SELECT * FROM lost_items", (err, results) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json(results);
-  });
-});
-
-// ✅ Route: Fetch Returned Items
-app.get("/return", (req, res) => {
-  db.query("SELECT * FROM return_items", (err, results) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json(results);
-  });
-});
-
-// ✅ Start server
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+</script>
+</body>
+</html>
