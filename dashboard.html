@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - CTS E-Lost & Found</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <title>CTS Lost & Found - Dashboard</title>
+   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
+   const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
     const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
-    const supabase=supabase.createClient(supabaseUrl,supabaseKey);
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
- <style>
+  <style>
     :root {
       --blue: #2563eb;
       --blue-dark: #1e3a8a;
@@ -133,25 +133,33 @@
   </style>
 </head>
 <body>
+  <!-- Sidebar -->
   <div class="sidebar">
-    <h2>CTS Lost&Found</h2>
-    <a href="dashboard.html">Home</a>
-    <a href="report.html">Report</a>
-    <a href="support.html">Support</a>
-    <a href="#" class="logout">Logout</a>
+    <div>
+      <h2>CTS Lost & Found</h2>
+      <ul>
+        <li><a href="dashboard.html">Home</a></li>
+        <li><a href="report.html">Report</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+    </div>
+    <div class="logout">
+      <a href="index.html">Logout</a>
+    </div>
   </div>
+
+  <!-- Main -->
   <div class="main">
     <h1>Welcome to Dashboard</h1>
-    <p>📢 Announcements will appear here.</p>
-    <input type="text" placeholder="Search missing item...">
-  </div>
 
-  <script>
-    document.querySelector(".logout").addEventListener("click",async(e)=>{
-      e.preventDefault(); await supabase.auth.signOut(); window.location="index.html";
-    });
-  </script>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for missing item...">
+    </div>
+
+    <div class="announcement">
+      <h2>📢 Announcements</h2>
+      <p>No new announcements at the moment.</p>
+    </div>
+  </div>
 </body>
 </html>
-
-
