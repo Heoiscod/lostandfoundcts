@@ -4,13 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - CTS E-Lost & Found</title>
- <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script>
-   const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
-    const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-  </script>
-<link rel="stylesheet" href="style.css">
 <style>
 /* Auth Form Styling */
 .auth-form {
@@ -24,76 +17,17 @@
   text-align: center;
 }
 
-.auth-form h2 {
-  margin-bottom: 0.5rem;
-  font-size: 1.8rem;
-  color: #222;
-}
-
-.auth-form .tagline {
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
-  color: #666;
-}
-
-.auth-form .form-group {
-  margin-bottom: 1.2rem;
-  text-align: left;
-}
-
-.auth-form label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.auth-form input {
-  width: 100%;
-  padding: 0.9rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-.auth-form input:focus {
-  border-color: #0077ff;
-  box-shadow: 0 0 6px rgba(0,119,255,0.2);
-}
-
-.auth-form .btn.primary {
-  width: 100%;
-  padding: 0.9rem;
-  background: #0077ff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.auth-form .btn.primary:hover {
-  background: #005fcc;
-}
-
-.auth-form .alt-link {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-.auth-form .alt-link a {
-  color: #0077ff;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.auth-form .alt-link a:hover {
-  text-decoration: underline;
-}
+.auth-form h2 { margin-bottom: 0.5rem; font-size: 1.8rem; color: #222; }
+.auth-form .tagline { margin-bottom: 1.5rem; font-size: 0.95rem; color: #666; }
+.auth-form .form-group { margin-bottom: 1.2rem; text-align: left; }
+.auth-form label { display: block; font-weight: bold; margin-bottom: 0.5rem; color: #333; }
+.auth-form input { width: 100%; padding: 0.9rem; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+.auth-form input:focus { border-color: #0077ff; box-shadow: 0 0 6px rgba(0,119,255,0.2); }
+.auth-form .btn.primary { width: 100%; padding: 0.9rem; background: #0077ff; color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
+.auth-form .btn.primary:hover { background: #005fcc; }
+.auth-form .alt-link { margin-top: 1rem; font-size: 0.9rem; color: #555; }
+.auth-form .alt-link a { color: #0077ff; text-decoration: none; font-weight: bold; }
+.auth-form .alt-link a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -136,7 +70,13 @@
   <p>© 2025 CTS-C E-Lost & Found. All rights reserved.</p>
 </footer>
 
-<script>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 // Header scroll effect
 let prevScrollPos = window.pageYOffset;
 const logoTitle = document.querySelector(".logo-title");
@@ -152,17 +92,28 @@ window.addEventListener("scroll", () => {
 });
 
 // Login form
-document.getElementById("loginForm").addEventListener("submit", function(e){
+const form = document.getElementById("loginForm");
+
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  let users = JSON.parse(localStorage.getItem("users") || "[]");
-  const user = users.find(u => u.email === email && u.password === password);
-  if(user){
-    alert("✅ Login successful!");
-    window.location.href="index.html";
-  } else {
+  const email = form.email.value.trim();
+  const password = form.password.value;
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .eq("password", password)
+    .single();
+
+  if (error || !data) {
     alert("❌ Invalid email or password!");
+    console.error(error);
+  } else {
+    alert("✅ Login successful!");
+    // Optionally, you can store the logged-in user in localStorage or sessionStorage
+    sessionStorage.setItem("user", JSON.stringify(data));
+    window.location.href = "index.html";
   }
 });
 </script>
