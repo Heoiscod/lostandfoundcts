@@ -158,9 +158,15 @@ document.getElementById("loginForm").addEventListener("submit", function(e){
   } else {
     alert("❌ Invalid email or password!");
   }
+// Supa Base 
+  const supabase = supabase.createClient(
+    window.NEXT_PUBLIC_SUPABASE_URL || 'https://YOUR-PROJECT.supabase.co',
+    window.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'YOUR-ANON-KEY'
+  );
 });
 </script>
 </body>
 </html>
+
 
 
