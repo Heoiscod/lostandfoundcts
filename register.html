@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register - CTS E-Lost & Found</title>
   <style>
-    /* ========================= 
-       Root Variables
-    ========================= */
     :root {
       --blue: #2563eb;
       --blue-dark: #1e3a8a;
@@ -16,8 +13,6 @@
       --gray-dark: #6b7280;
       --shadow: rgba(0, 0, 0, 0.116);
     }
-
-    /* Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: "Segoe UI", Arial, sans-serif; background: var(--gray); color: #111; line-height: 1.6; padding-top: 70px; }
     header { background: linear-gradient(to right, var(--blue-dark), var(--blue)); color: var(--white); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px var(--shadow); }
@@ -41,101 +36,99 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="logo-title">
-      <img src="images/logo.webp" alt="CTS Logo">
-      <h1>CTS E-LOST AND FOUND</h1>
+<header>
+  <div class="logo-title">
+    <img src="images/logo.webp" alt="CTS Logo">
+    <h1>CTS E-Lost & Found</h1>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="search.html">Search Items</a></li>
+      <li><a href="login.html" class="active">Login</a></li>
+      <li><a href="register.html">Register</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="container">
+  <h2>Create an Account</h2>
+  <form id="registerForm">
+    <label for="fullname">Full Name</label>
+    <input type="text" id="fullname" name="fullname" required>
+
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="confirm">Confirm Password</label>
+    <input type="password" id="confirm" name="confirm" required>
+
+    <button type="submit" class="btn">Register</button>
+    <div class="login-link">
+      Already have an account? <a href="login.html">Login here</a>
     </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="search.html">Search Items</a></li>
-        <li><a href="login.html" class="active">Login</a></li>
-        <li><a href="register.html">Register</a></li>
-      </ul>
-    </nav>
-  </header>
+  </form>
+</main>
 
-  <!-- Register Form -->
-  <main class="container">
-    <h2>Create an Account</h2>
-    <form id="registerForm">
-      <label for="fullname">Full Name</label>
-      <input type="text" id="fullname" name="fullname" required>
+<footer>
+  &copy; 2025 CTS E-Lost & Found. All rights reserved.
+</footer>
 
-      <label for="email">Email Address</label>
-      <input type="email" id="email" name="email" required>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" required>
+const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required>
+const form = document.getElementById("registerForm");
 
-      <label for="confirm">Confirm Password</label>
-      <input type="password" id="confirm" name="confirm" required>
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-      <button type="submit" class="btn">Register</button>
-      <div class="login-link">
-        Already have an account? <a href="login.html">Login here</a>
-      </div>
-    </form>
-  </main>
+  const fullname = form.fullname.value.trim();
+  const email = form.email.value.trim();
+  const username = form.username.value.trim();
+  const password = form.password.value;
+  const confirm = form.confirm.value;
 
-  <footer>
-    &copy; 2025 CTS E-Lost & Found. All rights reserved.
-  </footer>
+  if (password !== confirm) {
+    alert("Passwords do not match!");
+    return;
+  }
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  const { data, error } = await supabase
+    .from("users")
+    .insert([{ name: fullname, username, email, password }]); // ✅ use 'name' column
 
-    const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
-    const supabase = createClient(supabaseUrl, supabaseKey);
+  if (error) {
+    alert("Registration failed: " + error.message);
+    console.error(error);
+  } else {
+    alert("User registered successfully ✅");
+    form.reset();
+    window.location.href = "login.html";
+  }
+});
 
-    const form = document.getElementById("registerForm");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const fullname = form.fullname.value.trim();
-      const email = form.email.value.trim();
-      const username = form.username.value.trim();
-      const password = form.password.value;
-      const confirm = form.confirm.value;
-
-      if (password !== confirm) {
-        alert("Passwords do not match!");
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from("users")
-        .insert([{ username, email, password }]);
-
-      if (error) {
-        alert("Registration failed: " + error.message);
-        console.error(error);
-      } else {
-        alert("User registered successfully ✅");
-        form.reset();
-        window.location.href = "login.html";
-      }
-    });
-
-    // Hide logo-title on scroll down, show on scroll up
-    const logoTitle = document.querySelector(".logo-title");
-    let lastScroll = 0;
-    window.addEventListener("scroll", () => {
-      let currentScroll = window.scrollY;
-      if (currentScroll > lastScroll && currentScroll > 50) {
-        logoTitle.classList.add("hidden");
-      } else {
-        logoTitle.classList.remove("hidden");
-      }
-      lastScroll = currentScroll;
-    });
-  </script>
+// Logo hide/show on scroll
+const logoTitle = document.querySelector(".logo-title");
+let lastScroll = 0;
+window.addEventListener("scroll", () => {
+  let currentScroll = window.scrollY;
+  if (currentScroll > lastScroll && currentScroll > 50) {
+    logoTitle.classList.add("hidden");
+  } else {
+    logoTitle.classList.remove("hidden");
+  }
+  lastScroll = currentScroll;
+});
+</script>
 </body>
 </html>
