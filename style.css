@@ -114,6 +114,7 @@ h2 {
   font-size: 28px;
   color: var(--blue-dark);
   margin-bottom: 10px;
+   margin-top: 20px;
 }
 
 .tagline {
@@ -221,3 +222,4 @@ footer {
   margin-top: 40px;
   font-size: 14px;
 }
+
