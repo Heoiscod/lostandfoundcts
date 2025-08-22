@@ -112,8 +112,8 @@
     <p class="tagline">Welcome back! Please log in to continue.</p>
 
     <div class="form-group">
-      <label for="email">Email Address</label>
-      <input type="email" id="email" name="email" placeholder="Enter your CTS email" required>
+      <label for="input">Username or Email</label>
+      <input type="text" id="input" name="input" placeholder="Enter username or email" required>
     </div>
 
     <div class="form-group">
@@ -132,15 +132,15 @@
 
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import bcrypt from "https://cdn.jsdelivr.net/npm/bcryptjs/dist/bcrypt.min.js";
 
 const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+const supabaseKey = "YOUR_ANON_KEY_HERE"; // Replace with your Supabase anon key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Header scroll effect
 let prevScrollPos = window.pageYOffset;
 const logoTitle = document.querySelector(".logo-title");
-
 window.addEventListener("scroll", () => {
   let currentScrollPos = window.pageYOffset;
   if (currentScrollPos > prevScrollPos) {
@@ -156,28 +156,33 @@ const form = document.getElementById("loginForm");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = form.email.value.trim();
+  const input = form.input.value.trim(); // username or email
   const password = form.password.value;
 
+  // Fetch user by username OR email
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("email", email)
-    .eq("password", password)
+    .or(`username.eq.${input},email.eq.${input}`)
     .single();
 
   if (error || !data) {
-    alert("❌ Invalid email or password!");
+    alert("❌ Invalid username/email or password!");
     console.error(error);
-  } else {
-    alert("✅ Login successful!");
-    // Optionally, you can store the logged-in user in localStorage or sessionStorage
-    sessionStorage.setItem("user", JSON.stringify(data));
-    window.location.href = "index.html";
+    return;
   }
+
+  // Compare hashed password
+  const match = await bcrypt.compare(password, data.password);
+  if (!match) {
+    alert("❌ Invalid username/email or password!");
+    return;
+  }
+
+  alert("✅ Login successful!");
+  sessionStorage.setItem("user", JSON.stringify(data));
+  window.location.href = "dashboard.html";
 });
 </script>
 </body>
 </html>
-
-
