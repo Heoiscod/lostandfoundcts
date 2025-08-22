@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - CTS E-Lost & Found</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - CTS E-Lost & Found</title>
+ <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
    const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
     const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
     const supabase = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
-  <style>
+<link rel="stylesheet" href="style.css">
+<style>
 /* Auth Form Styling */
 .auth-form {
   background: #fff;
@@ -96,24 +97,74 @@
 </style>
 </head>
 <body>
-  <form id="loginForm">
-    <h2>Login</h2>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Login</button>
-  </form>
+<header>
+  <div class="logo-title">
+    <img src="images/logo.webp" alt="CTS Logo">
+    <h1>CTS E-Lost & Found</h1>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="search.html">Search Items</a></li>
+      <li><a href="login.html" class="active">Login</a></li>
+      <li><a href="register.html">Register</a></li>
+    </ul>
+  </nav>
+</header>
 
-  <script>
-    document.getElementById("loginForm").addEventListener("submit",async(e)=>{
-      e.preventDefault();
-      const email=document.getElementById("email").value;
-      const password=document.getElementById("password").value;
-      const {data,error}=await supabase.auth.signInWithPassword({email,password});
-      if(error) alert(error.message);
-      else { alert("✅ Login success!"); window.location="dashboard.html"; }
-    });
-  </script>
+<main class="container">
+  <form id="loginForm" class="auth-form">
+    <h2>Login to Your Account</h2>
+    <p class="tagline">Welcome back! Please log in to continue.</p>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your CTS email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    </div>
+
+    <button type="submit" class="btn primary">Login</button>
+    <p class="alt-link">Don't have an account? <a href="register.html">Register here</a></p>
+  </form>
+</main>
+
+<footer>
+  <p>© 2025 CTS-C E-Lost & Found. All rights reserved.</p>
+</footer>
+
+<script>
+// Header scroll effect
+let prevScrollPos = window.pageYOffset;
+const logoTitle = document.querySelector(".logo-title");
+
+window.addEventListener("scroll", () => {
+  let currentScrollPos = window.pageYOffset;
+  if (currentScrollPos > prevScrollPos) {
+    logoTitle.classList.add("hidden");
+  } else {
+    logoTitle.classList.remove("hidden");
+  }
+  prevScrollPos = currentScrollPos;
+});
+
+// Login form
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+  const user = users.find(u => u.email === email && u.password === password);
+  if(user){
+    alert("✅ Login successful!");
+    window.location.href="index.html";
+  } else {
+    alert("❌ Invalid email or password!");
+  }
+});
+</script>
 </body>
 </html>
-
-
