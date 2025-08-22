@@ -26,6 +26,7 @@ body {
   line-height: 1.6;
 }
 
+
 /* === HEADER === */
 header {
   background: linear-gradient(to right, var(--blue-dark), var(--blue));
@@ -35,9 +36,16 @@ header {
   align-items: center;
   padding: 15px 40px;
   box-shadow: 0 2px 8px var(--shadow);
-  position: sticky;
+  position: fixed;   /* change sticky → fixed */
   top: 0;
-  z-index: 10;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: top 0.3s ease; /* smooth hide/show */
+}
+
+header.hidden {
+  top: -100px; /* hides header when scrolling down */
 }
 
 header .logo {
