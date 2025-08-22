@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Report Missing Item</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <title>Report Missing Item - CTS E-Lost & Found</title>
+   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
    const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
     const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
     const supabase=supabase.createClient(supabaseUrl,supabaseKey);
   </script>
- <style>
+  <style>
     :root {
       --blue: #2563eb;
       --blue-dark: #1e3a8a;
@@ -115,34 +115,45 @@
   </style>
 </head>
 <body>
-  <form id="reportForm">
-    <h2>Report Missing Item</h2>
-    <select id="category">
-      <option>Money/Wallet</option>
-      <option>Gadgets</option>
-      <option>Accessories</option>
-      <option>Receipt/IDs</option>
-    </select>
-    <input type="text" id="name" placeholder="Name (or leave blank for Anonymous)">
-    <input type="text" id="contact" placeholder="Contact Number">
-    <input type="text" id="facebook" placeholder="Facebook Link">
-    <textarea id="info" placeholder="Additional Information"></textarea>
-    <button type="submit">Submit</button>
-  </form>
+  <div class="sidebar">
+    <h2>CTS Lost & Found</h2>
+    <a href="dashboard.html">Home</a>
+    <a href="report.html">Report</a>
+    <a href="support.html">Support</a>
+    <a href="index.html">Logout</a>
+  </div>
 
-  <script>
-    document.getElementById("reportForm").addEventListener("submit",async(e)=>{
-      e.preventDefault();
-      const category=document.getElementById("category").value;
-      const name=document.getElementById("name").value||"Anonymous";
-      const contact=document.getElementById("contact").value;
-      const facebook=document.getElementById("facebook").value;
-      const info=document.getElementById("info").value;
-      const {data,error}=await supabase.from("reports").insert([{category,name,contact,facebook,info}]);
-      if(error) alert(error.message); else {alert("✅ Report submitted!"); e.target.reset();}
-    });
-  </script>
+  <div class="main-content">
+    <div class="form-box">
+      <h2>Report a Missing Item</h2>
+      <form action="#" method="post" enctype="multipart/form-data">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">-- Select Category --</option>
+          <option>Money/Wallet</option>
+          <option>Gadgets</option>
+          <option>Accessories</option>
+          <option>Receipts/IDs</option>
+        </select>
+
+        <label for="itemImage">Upload Item Picture</label>
+        <input type="file" id="itemImage" name="itemImage" accept="image/*" required>
+
+        <label for="name">Your Name (optional)</label>
+        <input type="text" id="name" name="name" placeholder="Leave blank for Anonymous">
+
+        <label for="contact">Contact Number</label>
+        <input type="text" id="contact" name="contact">
+
+        <label for="facebook">Facebook Link</label>
+        <input type="url" id="facebook" name="facebook">
+
+        <label for="info">Additional Information</label>
+        <textarea id="info" name="info" rows="4"></textarea>
+
+        <button type="submit">Submit Report</button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
-
-
