@@ -3,255 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Items - CTS E-Lost & Found</title>
+  <title>Search Missing Items</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl="https://YOUR_PROJECT_ID.supabase.co";
+    const supabaseKey="YOUR_ANON_KEY";
+    const supabase=supabase.createClient(supabaseUrl,supabaseKey);
+  </script>
   <style>
-    /* ========================= 
-       Root Variables
-    ========================= */
-    :root {
-      --blue: #2563eb;
-      --blue-dark: #1e3a8a;
-      --white: #ffffff;
-      --gray: #f9fafb;
-      --gray-dark: #6b7280;
-      --shadow: rgba(0, 0, 0, 0.15);
-      --accent: #fbbf24;
-    }
-
-    /* =========================
-       General Reset
-    ========================= */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: var(--gray);
-      color: #111;
-      line-height: 1.6;
-      padding-top: 70px; /* space for fixed header */
-    }
-
-    /* =========================
-       Header
-    ========================= */
-    header {
-      background: linear-gradient(to right, var(--blue-dark), var(--blue));
-      color: var(--white);
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      box-shadow: 0 2px 8px var(--shadow);
-    }
-
-    .logo-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 30px;
-      transition: opacity 0.3s ease, height 0.3s ease, padding 0.3s ease;
-    }
-
-    .logo-title img {
-      height: 40px;
-    }
-
-    .logo-title h1 {
-      font-size: 18px;
-      font-weight: bold;
-      align-self: center;
-    }
-
-    .logo-title.hidden {
-      opacity: 0;
-      height: 0;
-      overflow: hidden;
-      padding: 0 30px;
-    }
-
-    nav {
-      background: rgba(0,0,0,0.1);
-      padding: 10px 20px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    nav ul li a {
-      color: var(--white);
-      text-decoration: none;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    /* =========================
-       Main Content
-    ========================= */
-    main.container {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    h2 {
-      font-size: 28px;
-      color: var(--blue-dark);
-      margin-bottom: 10px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .tagline {
-      font-size: 16px;
-      color: var(--gray-dark);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    /* Search Form */
-    form.search-box {
-      background: var(--white);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px var(--shadow);
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    form.search-box input[type="text"] {
-      flex: 1;
-      min-width: 200px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      outline: none;
-    }
-
-    form.search-box button {
-      background: var(--blue);
-      color: var(--white);
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    form.search-box button:hover {
-      background: #1d4ed8;
-    }
-
-    /* Results */
-    .results {
-      margin-top: 30px;
-    }
-
-    .result-item {
-      background: var(--white);
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px var(--shadow);
-      margin-bottom: 15px;
-      text-align: left;
-    }
-
-    .result-item h3 {
-      color: var(--blue-dark);
-      margin-bottom: 5px;
-    }
-
-    .result-item p {
-      color: var(--gray-dark);
-      font-size: 14px;
-    }
-
-    /* =========================
-       Footer
-    ========================= */
-    footer {
-      background: var(--blue-dark);
-      color: var(--white);
-      text-align: center;
-      padding: 15px;
-      margin-top: 40px;
-      font-size: 14px;
-    }
+    body{background:#0b0f15; color:#e5e7eb; font-family:Arial; padding:20px;}
+    input{width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:none;}
+    .item{background:#111827; padding:15px; margin:10px 0; border-radius:12px;}
+    h2{color:#58a6ff;}
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="logo-title" id="logoTitle">
-      <img src="images/logo.webp" alt="CTS Logo">
-      <h1>CTS E-Lost & Found</h1>
-    </div>
-    <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="search.html">Search Items</a></li>
-      <li><a href="login.html" class="active">Login</a></li>
-      <li><a href="register.html">Register</a></li>
-    </ul>
-  </nav>
-    </nav>
-  </header>
+  <h2>Search Missing Items</h2>
+  <input type="text" id="search" placeholder="Search by category or name...">
+  <div id="results"></div>
 
-  <!-- Main -->
-  <main class="container">
-    <h2>Search Lost & Found Items</h2>
-    <p class="tagline">Find items that were reported lost or found in our campus.</p>
-
-    <form class="search-box">
-      <input type="text" placeholder="Enter keyword (e.g. bag, phone, ID)">
-      <button type="submit">Search</button>
-    </form>
-
-    <div class="results">
-      <div class="result-item">
-        <h3>Black Backpack</h3>
-        <p>Found at library, contains notebooks and pens.</p>
-      </div>
-      <div class="result-item">
-        <h3>Student ID</h3>
-        <p>Lost near cafeteria, name: Juan Dela Cruz.</p>
-      </div>
-    </div>
-  </main>
-
-  <footer>
-    &copy; 2025 CTS E-Lost & Found. All Rights Reserved.
-  </footer>
-
-  <!-- Scroll Hide Logo -->
   <script>
-    let lastScroll = 0;
-    const logoTitle = document.getElementById("logoTitle");
-
-    window.addEventListener("scroll", () => {
-      const currentScroll = window.scrollY;
-      if (currentScroll > lastScroll) {
-        logoTitle.classList.add("hidden");
-      } else {
-        logoTitle.classList.remove("hidden");
-      }
-      lastScroll = currentScroll;
-    });
+    async function loadReports(){
+      const {data,error}=await supabase.from("reports").select("*").order("id",{ascending:false});
+      if(error) console.log(error); else render(data);
+    }
+    function render(reports){
+      const search=document.getElementById("search").value.toLowerCase();
+      const container=document.getElementById("results");
+      container.innerHTML="";
+      reports.filter(r=>r.category.toLowerCase().includes(search)||r.name.toLowerCase().includes(search))
+      .forEach(r=>{
+        container.innerHTML+=`<div class="item"><b>${r.category}</b><br>Name: ${r.name}<br>Contact: ${r.contact}<br>Facebook: ${r.facebook}<br>Info: ${r.info}</div>`;
+      });
+    }
+    document.getElementById("search").addEventListener("input",loadReports);
+    loadReports();
   </script>
 </body>
 </html>
-
