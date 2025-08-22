@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Missing Items</title>
+  <title>Search Items - CTS E-Lost & Found</title>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
     const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
     const supabase=supabase.createClient(supabaseUrl,supabaseKey);
   </script>
-    <style>
+  <style>
     /* ========================= 
        Root Variables
     ========================= */
@@ -200,28 +200,63 @@
   </style>
 </head>
 <body>
-  <h2>Search Missing Items</h2>
-  <input type="text" id="search" placeholder="Search by category or name...">
-  <div id="results"></div>
+  <!-- Header -->
+  <header>
+    <div class="logo-title" id="logoTitle">
+      <img src="images/logo.webp" alt="CTS Logo">
+      <h1>CTS E-LOST AND FOUND</h1>
+    </div>
+    <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="search.html">Search Items</a></li>
+      <li><a href="login.html" class="active">Login</a></li>
+      <li><a href="register.html">Register</a></li>
+    </ul>
+  </nav>
+    </nav>
+  </header>
 
+  <!-- Main -->
+  <main class="container">
+    <h2>Search Lost & Found Items</h2>
+    <p class="tagline">Find items that were reported lost or found in our campus.</p>
+
+    <form class="search-box">
+      <input type="text" placeholder="Enter keyword (e.g. bag, phone, ID)">
+      <button type="submit">Search</button>
+    </form>
+
+    <div class="results">
+      <div class="result-item">
+        <h3>Black Backpack</h3>
+        <p>Found at library, contains notebooks and pens.</p>
+      </div>
+      <div class="result-item">
+        <h3>Student ID</h3>
+        <p>Lost near cafeteria, name: Juan Dela Cruz.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 CTS E-Lost & Found. All Rights Reserved.
+  </footer>
+
+  <!-- Scroll Hide Logo -->
   <script>
-    async function loadReports(){
-      const {data,error}=await supabase.from("reports").select("*").order("id",{ascending:false});
-      if(error) console.log(error); else render(data);
-    }
-    function render(reports){
-      const search=document.getElementById("search").value.toLowerCase();
-      const container=document.getElementById("results");
-      container.innerHTML="";
-      reports.filter(r=>r.category.toLowerCase().includes(search)||r.name.toLowerCase().includes(search))
-      .forEach(r=>{
-        container.innerHTML+=`<div class="item"><b>${r.category}</b><br>Name: ${r.name}<br>Contact: ${r.contact}<br>Facebook: ${r.facebook}<br>Info: ${r.info}</div>`;
-      });
-    }
-    document.getElementById("search").addEventListener("input",loadReports);
-    loadReports();
+    let lastScroll = 0;
+    const logoTitle = document.getElementById("logoTitle");
+
+    window.addEventListener("scroll", () => {
+      const currentScroll = window.scrollY;
+      if (currentScroll > lastScroll) {
+        logoTitle.classList.add("hidden");
+      } else {
+        logoTitle.classList.remove("hidden");
+      }
+      lastScroll = currentScroll;
+    });
   </script>
 </body>
 </html>
-
-
