@@ -9,7 +9,8 @@
 <body>
   
   <header>
-    <div class="logo">
+    <!-- Logo + Title -->
+    <div class="logo-title">
       <img src="images/logo.webp" alt="CTS Logo">
       <h1>CTS E-Lost & Found</h1>
     </div>
@@ -93,14 +94,16 @@
 
   <script>
     let prevScrollPos = window.pageYOffset;
-    const header = document.querySelector("header");
+    const logoTitle = document.querySelector(".logo-title");
 
     window.addEventListener("scroll", () => {
       let currentScrollPos = window.pageYOffset;
       if (currentScrollPos > prevScrollPos) {
-        header.classList.add("hidden");
+        // scrolling down → hide logo/title
+        logoTitle.classList.add("hidden");
       } else {
-        header.classList.remove("hidden");
+        // scrolling up → show logo/title
+        logoTitle.classList.remove("hidden");
       }
       prevScrollPos = currentScrollPos;
     });
