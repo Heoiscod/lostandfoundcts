@@ -99,5 +99,22 @@
   <footer>
     <p>© 2025 CTS-C E-Lost & Found. All rights reserved. Created by Chavez, Cody BSIT</p>
   </footer>
+<script>
+  let prevScrollPos = window.pageYOffset;
+  const header = document.querySelector("header");
+
+  window.addEventListener("scroll", () => {
+    let currentScrollPos = window.pageYOffset;
+    if (currentScrollPos > prevScrollPos) {
+      // scrolling down → hide header
+      header.classList.add("hidden");
+    } else {
+      // scrolling up → show header
+      header.classList.remove("hidden");
+    }
+    prevScrollPos = currentScrollPos;
+  });
+</script>
 </body>
 </html>
+
