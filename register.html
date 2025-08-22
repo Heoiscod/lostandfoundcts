@@ -1,190 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register - CTS E-Lost & Found</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa, #93c5fd);
-    color: #333;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - CTS E-Lost & Found</title>
+  <style>
+    /* ========================= 
+       Root Variables
+    ========================= */
+    :root {
+      --blue: #2563eb;
+      --blue-dark: #1e3a8a;
+      --white: #ffffff;
+      --gray: #f9fafb;
+      --gray-dark: #6b7280;
+      --shadow: rgba(0, 0, 0, 0.15);
+      --accent: #fbbf24;
+    }
 
-  header {
-    background: linear-gradient(to right, #1e3a8a, #2563eb);
-    color: white;
-    padding: 15px 20px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  header h1 {
-    margin: 0;
-    font-size: 24px;
-  }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--gray);
+      color: #111;
+      line-height: 1.6;
+      padding-top: 70px; /* space for fixed header */
+    }
 
-  main.container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-  }
+    /* =========================
+       Header
+    ========================= */
+    header {
+      background: linear-gradient(to right, var(--blue-dark), var(--blue));
+      color: var(--white);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
 
-  form.auth-form {
-    background: white;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-  }
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 30px;
+      transition: opacity 0.3s ease, height 0.3s ease, padding 0.3s ease;
+    }
 
-  form.auth-form label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    color: #555;
-    text-align: left;
-  }
+    .logo-title img {
+      height: 40px;
+    }
 
-  form.auth-form input {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    transition: 0.3s;
-  }
+    .logo-title h1 {
+      font-size: 18px;
+      font-weight: bold;
+    }
 
-  form.auth-form input:focus {
-    border-color: #2563eb;
-    outline: none;
-  }
+    .logo-title.hidden {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      padding: 0 30px;
+    }
 
-  form.auth-form button {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(90deg, #1e3a8a, #2563eb);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-  }
+    nav {
+      background: rgba(0,0,0,0.1);
+      padding: 10px 20px;
+    }
 
-  form.auth-form button:hover {
-    opacity: 0.9;
-  }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-  .alt-link {
-    margin-top: 15px;
-    text-align: center;
-  }
+    nav ul li a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+    }
 
-  .alt-link a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: bold;
-  }
+    /* =========================
+       Registration Form
+    ========================= */
+    main.container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px var(--shadow);
+      text-align: left;
+    }
 
-  .alt-link a:hover {
-    text-decoration: underline;
-  }
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 25px;
-}
+    main.container h2 {
+      text-align: center;
+      font-size: 28px;
+      color: var(--blue-dark);
+      margin-bottom: 20px;
+    }
 
-nav ul li a {
-  text-decoration: none;
-  color: var(--white);
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: 0.3s;
-}
+    form label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--blue-dark);
+    }
 
-nav ul li a:hover {
-  background: var(--white);
-  color: var(--blue-dark);
-}
-@media (max-width: 500px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px 20px;
-  }
-  }
-</style>
+    form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    form input:focus {
+      border-color: var(--blue);
+      outline: none;
+      box-shadow: 0 0 4px var(--blue);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px;
+      width: 100%;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: var(--gray-dark);
+    }
+
+    .login-link a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    footer {
+      background: var(--blue-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-
-<header>
-  <div class="logo">
-    <img src="images/logo.webp" alt="CTS Logo">
-    <h1>CTS E-Lost & Found</h1>
-  </div>
-  <nav>
-    <ul>
+  <!-- Header -->
+  <header>
+    <div class="logo-title">
+      <img src="images/logo.webp" alt="CTS Logo">
+      <h1>CTS E-LOST AND FOUND</h1>
+    </div>
+    <nav>
+      <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="search.html">Search Items</a></li>
-      <li><a href="login.html">Login</a></li>
-      <li><a href="register.html" class="active">Register</a></li>
+      <li><a href="login.html" class="active">Login</a></li>
+      <li><a href="register.html">Register</a></li>
     </ul>
-  </nav>
-</header>
+    </nav>
+  </header>
 
+  <!-- Register Form -->
+  <main class="container">
+    <h2>Create an Account</h2>
+    <form action="submit_register.php" method="post">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" name="fullname" required>
 
-<main class="container">
-  <form id="registerForm" class="auth-form">
-    <h2>Create Your Account</h2>
-    <label for="name">Full Name</label>
-    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required>
 
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" placeholder="Enter your CTS email" required>
-    
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" placeholder="Enter a password" required>
-    
-    <button type="submit">Register</button>
-    <div class="alt-link">
-      Already have an account? <a href="login.html">Login</a>
-    </div>
-  </form>
-</main>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
 
-<script>
-document.getElementById("registerForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
 
-  let users = JSON.parse(localStorage.getItem("users") || "[]");
-  if(users.find(u => u.email === email)){
-    alert("❌ Email already registered!");
-    return;
-  }
+      <label for="confirm">Confirm Password</label>
+      <input type="password" id="confirm" name="confirm" required>
 
-  users.push({name,email,password});
-  localStorage.setItem("users", JSON.stringify(users));
-  alert("✅ Registration successful!");
-  this.reset();
-  window.location.href = "login.html";
-});
-</script>
+      <button type="submit" class="btn">Register</button>
 
+      <div class="login-link">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
+    </form>
+  </main>
+
+  <footer>
+    &copy; 2025 CTS E-Lost & Found. All rights reserved.
+  </footer>
+
+  <script>
+    // Hide logo-title on scroll down, show on scroll up
+    const logoTitle = document.querySelector(".logo-title");
+    let lastScroll = 0;
+
+    window.addEventListener("scroll", () => {
+      let currentScroll = window.scrollY;
+      if (currentScroll > lastScroll && currentScroll > 50) {
+        logoTitle.classList.add("hidden");
+      } else {
+        logoTitle.classList.remove("hidden");
+      }
+      lastScroll = currentScroll;
+    });
+  </script>
 </body>
 </html>
