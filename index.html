@@ -13,6 +13,8 @@
       <img src="images/logo.webp" alt="CTS Logo">
       <h1>CTS E-Lost & Found</h1>
     </div>
+
+    <!-- Navigation -->
     <nav>
       <ul>
         <li><a href="/">Home</a></li>
@@ -23,50 +25,40 @@
     </nav>
   </header>
 
-  
   <main class="container">
     <h2>CTS E-Lost & Found</h2>
     <p>A Digital Lost and Found Portal for the <strong>College of Technological Science – Cebu</strong></p>
     <p class="tagline">Connecting our CTS-C community through lost and found items</p>
 
-  
     <div class="cta-buttons">
       <a href="/search.html" class="btn primary">Search Items</a>
       <a href="/register.html" class="btn secondary">Get Started</a>
     </div>
 
-
     <section class="stats">
-      <div class="stats">
-  <div class="stat-box">
-    <h3>0</h3>
-    <p>Total Items</p>
-  </div>
-
-  <div class="stat-box">
-    <h3>0</h3>
-    <p>Lost Items</p>
-  </div>
-
-  <div class="stat-box">
-    <h3>0</h3>
-    <p>Found Items</p>
-  </div>
-
-  <div class="stat-box">
-    <h3>0</h3>
-    <p>Items Returned</p>
-  </div>
-</div>
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Total Items</p>
+      </div>
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Lost Items</p>
+      </div>
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Found Items</p>
+      </div>
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Items Returned</p>
+      </div>
     </section>
 
-  
     <section class="empty">
       <p><strong>No Items Posted Yet</strong></p>
       <p>Be the first to help the Texians community by reporting a lost or found item!</p>
     </section>
 
-    
     <section class="how-it-works">
       <h2>How It Works</h2>
       <div class="steps">
@@ -85,7 +77,6 @@
       </div>
     </section>
 
-  
     <section class="join">
       <h2>Join the CTS-C Community</h2>
       <p>Help your fellow students and staff by joining our digital lost and found community.</p>
@@ -99,22 +90,20 @@
   <footer>
     <p>© 2025 CTS-C E-Lost & Found. All rights reserved. Created by Chavez, Cody BSIT</p>
   </footer>
-<script>
-  let prevScrollPos = window.pageYOffset;
-  const header = document.querySelector("header");
 
-  window.addEventListener("scroll", () => {
-    let currentScrollPos = window.pageYOffset;
-    if (currentScrollPos > prevScrollPos) {
-      // scrolling down → hide header
-      header.classList.add("hidden");
-    } else {
-      // scrolling up → show header
-      header.classList.remove("hidden");
-    }
-    prevScrollPos = currentScrollPos;
-  });
-</script>
+  <script>
+    let prevScrollPos = window.pageYOffset;
+    const header = document.querySelector("header");
+
+    window.addEventListener("scroll", () => {
+      let currentScrollPos = window.pageYOffset;
+      if (currentScrollPos > prevScrollPos) {
+        header.classList.add("hidden");
+      } else {
+        header.classList.remove("hidden");
+      }
+      prevScrollPos = currentScrollPos;
+    });
+  </script>
 </body>
 </html>
-
