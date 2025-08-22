@@ -75,6 +75,8 @@ nav ul {
   gap: 20px;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;       /* wrap normally if space allows */
+  justify-content: flex-end;
 }
 
 nav ul li a {
@@ -82,27 +84,22 @@ nav ul li a {
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
-  white-space: nowrap; /* prevent breaking into 2 lines */
+  white-space: nowrap;
 }
 
-nav ul li a:hover {
-  color: var(--accent);
-}
-
-/* =========================
-   Mobile Fix (500px and below)
-========================= */
-@media (max-width: 500px) {
+/* Phones under 600px wide → keep all in one row with scroll */
+@media (max-width: 600px) {
   nav ul {
-    overflow-x: auto;       /* enable horizontal scroll */
-    flex-wrap: nowrap;      /* keep in one row */
+    flex-wrap: nowrap;      /* force single line */
+    overflow-x: auto;       /* allow horizontal scroll */
+    justify-content: flex-start;
     gap: 15px;
     padding-bottom: 5px;
-    scrollbar-width: none;  /* hide scrollbar (Firefox) */
+    scrollbar-width: none;  /* hide Firefox scrollbar */
   }
 
   nav ul::-webkit-scrollbar {
-    display: none; /* hide scrollbar (Chrome/Safari) */
+    display: none;          /* hide Chrome/Safari scrollbar */
   }
 
   nav ul li a {
@@ -239,3 +236,4 @@ footer {
   margin-top: 40px;
   font-size: 14px;
 }
+
