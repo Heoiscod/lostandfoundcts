@@ -6,88 +6,19 @@
 <title>Login - CTS E-Lost & Found</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* Auth Form Styling */
-.auth-form {
-  background: #fff;
-  max-width: 420px;
-  width: 100%;
-  margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  text-align: center;
-}
-
-.auth-form h2 {
-  margin-bottom: 0.5rem;
-  font-size: 1.8rem;
-  color: #222;
-}
-
-.auth-form .tagline {
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
-  color: #666;
-}
-
-.auth-form .form-group {
-  margin-bottom: 1.2rem;
-  text-align: left;
-}
-
-.auth-form label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.auth-form input {
-  width: 100%;
-  padding: 0.9rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-.auth-form input:focus {
-  border-color: #0077ff;
-  box-shadow: 0 0 6px rgba(0,119,255,0.2);
-}
-
-.auth-form .btn.primary {
-  width: 100%;
-  padding: 0.9rem;
-  background: #0077ff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.auth-form .btn.primary:hover {
-  background: #005fcc;
-}
-
-.auth-form .alt-link {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-.auth-form .alt-link a {
-  color: #0077ff;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.auth-form .alt-link a:hover {
-  text-decoration: underline;
-}
+/* Auth Form Styling same as before */
+.auth-form { background: #fff; max-width: 420px; width: 100%; margin: 2rem auto; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); text-align: center; }
+.auth-form h2 { margin-bottom: 0.5rem; font-size: 1.8rem; color: #222; }
+.auth-form .tagline { margin-bottom: 1.5rem; font-size: 0.95rem; color: #666; }
+.auth-form .form-group { margin-bottom: 1.2rem; text-align: left; }
+.auth-form label { display: block; font-weight: bold; margin-bottom: 0.5rem; color: #333; }
+.auth-form input { width: 100%; padding: 0.9rem; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+.auth-form input:focus { border-color: #0077ff; box-shadow: 0 0 6px rgba(0,119,255,0.2); }
+.auth-form .btn.primary { width: 100%; padding: 0.9rem; background: #0077ff; color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
+.auth-form .btn.primary:hover { background: #005fcc; }
+.auth-form .alt-link { margin-top: 1rem; font-size: 0.9rem; color: #555; }
+.auth-form .alt-link a { color: #0077ff; text-decoration: none; font-weight: bold; }
+.auth-form .alt-link a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -112,8 +43,8 @@
     <p class="tagline">Welcome back! Please log in to continue.</p>
 
     <div class="form-group">
-      <label for="input">Username or Email</label>
-      <input type="text" id="input" name="input" placeholder="Enter username or email" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
     </div>
 
     <div class="form-group">
@@ -130,60 +61,37 @@
   <p>© 2025 CTS-C E-Lost & Found. All rights reserved.</p>
 </footer>
 
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-import bcrypt from "https://cdn.jsdelivr.net/npm/bcryptjs/dist/bcrypt.min.js";
-
-const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg"; // Replace with your Supabase anon key
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// Header scroll effect
-let prevScrollPos = window.pageYOffset;
-const logoTitle = document.querySelector(".logo-title");
-window.addEventListener("scroll", () => {
-  let currentScrollPos = window.pageYOffset;
-  if (currentScrollPos > prevScrollPos) {
-    logoTitle.classList.add("hidden");
-  } else {
-    logoTitle.classList.remove("hidden");
-  }
-  prevScrollPos = currentScrollPos;
-});
-
-// Login form
+<script>
 const form = document.getElementById("loginForm");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const input = form.input.value.trim(); // username or email
+  const email = form.email.value.trim();
   const password = form.password.value;
 
-  // Fetch user by username OR email
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .or(`username.eq.${input},email.eq.${input}`)
-    .single();
+  try {
+    const res = await fetch("http://localhost:5000/login", {  // your server.js login route
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
 
-  if (error || !data) {
-    alert("❌ Invalid username/email or password!");
-    console.error(error);
-    return;
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert("❌ " + data.error);
+      return;
+    }
+
+    alert("✅ Login successful!");
+    sessionStorage.setItem("token", data.token); // store JWT
+    window.location.href = "dashboard.html";
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ Something went wrong. Please try again.");
   }
-
-  // Compare hashed password
-  const match = await bcrypt.compare(password, data.password);
-  if (!match) {
-    alert("❌ Invalid username/email or password!");
-    return;
-  }
-
-  alert("✅ Login successful!");
-  sessionStorage.setItem("user", JSON.stringify(data));
-  window.location.href = "dashboard.html";
 });
 </script>
 </body>
 </html>
-
