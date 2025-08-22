@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register - CTS E-Lost & Found</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <style>
+    /* ========================= 
+       Root Variables
+    ========================= */
     :root {
       --blue: #2563eb;
       --blue-dark: #1e3a8a;
@@ -13,55 +15,29 @@
       --gray: #f9fafb;
       --gray-dark: #6b7280;
       --shadow: rgba(0, 0, 0, 0.116);
-      --accent: #fbbf24;
     }
+
+    /* Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: var(--gray);
-      color: #111;
-      line-height: 1.6;
-      padding-top: 70px;
-    }
-    header {
-      background: linear-gradient(to right, var(--blue-dark), var(--blue));
-      color: var(--white);
-      position: fixed; top: 0; left: 0; width: 100%;
-      z-index: 1000; box-shadow: 0 2px 8px var(--shadow);
-    }
-    .logo-title { display: flex; align-items: center; gap: 10px; padding: 12px 30px; transition: 0.3s ease; }
+    body { font-family: "Segoe UI", Arial, sans-serif; background: var(--gray); color: #111; line-height: 1.6; padding-top: 70px; }
+    header { background: linear-gradient(to right, var(--blue-dark), var(--blue)); color: var(--white); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px var(--shadow); }
+    .logo-title { display: flex; align-items: center; gap: 10px; padding: 12px 30px; transition: opacity 0.3s ease, height 0.3s ease, padding 0.3s ease; }
     .logo-title img { height: 40px; }
     .logo-title h1 { font-size: 18px; font-weight: bold; }
     .logo-title.hidden { opacity: 0; height: 0; overflow: hidden; padding: 0 30px; }
     nav { background: rgba(0,0,0,0.1); padding: 10px 20px; }
     nav ul { list-style: none; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
     nav ul li a { color: var(--white); text-decoration: none; font-weight: 500; }
-    main.container {
-      max-width: 500px; margin: 40px auto;
-      background: var(--white); padding: 30px;
-      border-radius: 12px; box-shadow: 0 2px 8px var(--shadow);
-      text-align: left;
-    }
+    main.container { max-width: 500px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px var(--shadow); text-align: left; }
     main.container h2 { text-align: center; font-size: 28px; color: var(--blue-dark); margin-bottom: 20px; }
     form label { display: block; font-weight: 600; margin-bottom: 5px; color: var(--blue-dark); }
-    form input {
-      width: 100%; padding: 10px; margin-bottom: 15px;
-      border: 1px solid #ddd; border-radius: 6px; font-size: 15px;
-    }
+    form input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; }
     form input:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 4px var(--blue); }
-    .btn {
-      display: inline-block; padding: 12px; width: 100%;
-      border-radius: 6px; font-weight: 600; font-size: 16px;
-      text-decoration: none; background: var(--blue); color: var(--white);
-      border: none; cursor: pointer; transition: 0.3s ease;
-    }
+    .btn { display: inline-block; padding: 12px; width: 100%; border-radius: 6px; font-weight: 600; font-size: 16px; text-decoration: none; background: var(--blue); color: var(--white); border: none; cursor: pointer; transition: 0.3s ease; }
     .btn:hover { background: #1d4ed8; }
     .login-link { text-align: center; margin-top: 15px; font-size: 14px; color: var(--gray-dark); }
     .login-link a { color: var(--blue); text-decoration: none; }
-    footer {
-      background: var(--blue-dark); color: var(--white);
-      text-align: center; padding: 15px; margin-top: 40px; font-size: 14px;
-    }
+    footer { background: var(--blue-dark); color: var(--white); text-align: center; padding: 15px; margin-top: 40px; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -111,45 +87,44 @@
     &copy; 2025 CTS E-Lost & Found. All rights reserved.
   </footer>
 
-  <script>
-    // Supabase client
-    const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg"; // replace with anon key, not service key!
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    // Handle form submit
-    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const form = document.getElementById("registerForm");
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const fullname = document.getElementById("fullname").value;
-      const email = document.getElementById("email").value;
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const confirm = document.getElementById("confirm").value;
+      const fullname = form.fullname.value.trim();
+      const email = form.email.value.trim();
+      const username = form.username.value.trim();
+      const password = form.password.value;
+      const confirm = form.confirm.value;
 
       if (password !== confirm) {
-        alert("❌ Passwords do not match!");
+        alert("Passwords do not match!");
         return;
       }
 
-      // Register user in Supabase Auth
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: { fullname, username }
-        }
-      });
+      const { data, error } = await supabase
+        .from("users")
+        .insert([{ username, email, password }]);
 
       if (error) {
-        alert("❌ " + error.message);
+        alert("Registration failed: " + error.message);
+        console.error(error);
       } else {
-        alert("✅ Registration successful! Please check your email to verify your account.");
+        alert("User registered successfully ✅");
+        form.reset();
         window.location.href = "login.html";
       }
     });
 
-    // Hide logo-title on scroll
+    // Hide logo-title on scroll down, show on scroll up
     const logoTitle = document.querySelector(".logo-title");
     let lastScroll = 0;
     window.addEventListener("scroll", () => {
@@ -164,4 +139,3 @@
   </script>
 </body>
 </html>
-
