@@ -12,12 +12,172 @@
     const supabase = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
   <style>
-    body { font-family: Arial, sans-serif; background:#0b0f15; color:#e5e7eb; display:flex; justify-content:center; align-items:center; height:100vh; }
-    form { background:#111827; padding:25px; border-radius:12px; width:100%; max-width:400px; box-shadow:0 0 10px rgba(0,0,0,.5);}
-    h2 { text-align:center; margin-bottom:15px; color:#58a6ff; }
-    input { width:100%; padding:10px; margin:8px 0; border:none; border-radius:8px;}
-    button { background:#58a6ff; border:none; padding:10px; color:white; width:100%; border-radius:8px; cursor:pointer; }
-    button:hover { background:#3b82f6; }
+    /* ========================= 
+       Root Variables
+    ========================= */
+    :root {
+      --blue: #2563eb;
+      --blue-dark: #1e3a8a;
+      --white: #ffffff;
+      --gray: #f9fafb;
+      --gray-dark: #6b7280;
+      --shadow: rgba(0, 0, 0, 0.116);
+      --accent: #fbbf24;
+    }
+
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--gray);
+      color: #111;
+      line-height: 1.6;
+      padding-top: 70px; /* space for fixed header */
+    }
+
+    /* =========================
+       Header
+    ========================= */
+    header {
+      background: linear-gradient(to right, var(--blue-dark), var(--blue));
+      color: var(--white);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 30px;
+      transition: opacity 0.3s ease, height 0.3s ease, padding 0.3s ease;
+    }
+
+    .logo-title img {
+      height: 40px;
+    }
+
+    .logo-title h1 {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .logo-title.hidden {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      padding: 0 30px;
+    }
+
+    nav {
+      background: rgba(0,0,0,0.1);
+      padding: 10px 20px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    nav ul li a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* =========================
+       Registration Form
+    ========================= */
+    main.container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px var(--shadow);
+      text-align: left;
+    }
+
+    main.container h2 {
+      text-align: center;
+      font-size: 28px;
+      color: var(--blue-dark);
+      margin-bottom: 20px;
+    }
+
+    form label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--blue-dark);
+    }
+
+    form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    form input:focus {
+      border-color: var(--blue);
+      outline: none;
+      box-shadow: 0 0 4px var(--blue);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px;
+      width: 100%;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: var(--gray-dark);
+    }
+
+    .login-link a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    footer {
+      background: var(--blue-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -49,4 +209,5 @@
   </script>
 </body>
 </html>
+
 
