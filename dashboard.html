@@ -3,157 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CTS Lost & Found - Dashboard</title>
+  <title>Dashboard - CTS E-Lost & Found</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl="https://YOUR_PROJECT_ID.supabase.co";
+    const supabaseKey="YOUR_ANON_KEY";
+    const supabase=supabase.createClient(supabaseUrl,supabaseKey);
+  </script>
   <style>
-    :root {
-      --blue: #2563eb;
-      --blue-dark: #1e3a8a;
-      --white: #ffffff;
-      --gray: #f9fafb;
-      --gray-dark: #6b7280;
-      --shadow: rgba(0, 0, 0, 0.15);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: var(--gray);
-      color: #111;
-      display: flex;
-      min-height: 100vh;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      background: linear-gradient(to bottom, var(--blue-dark), var(--blue));
-      color: var(--white);
-      width: 220px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 2px 0 6px var(--shadow);
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-    }
-
-    .sidebar h2 {
-      font-size: 20px;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .sidebar ul li {
-      margin: 15px 0;
-    }
-
-    .sidebar ul li a {
-      color: var(--white);
-      text-decoration: none;
-      font-weight: 500;
-      display: block;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: background 0.3s;
-    }
-
-    .sidebar ul li a:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .logout {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .logout a {
-      display: inline-block;
-      padding: 10px 20px;
-      background: #ef4444;
-      color: var(--white);
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .logout a:hover {
-      background: #dc2626;
-    }
-
-    /* Main */
-    .main {
-      margin-left: 240px;
-      padding: 20px;
-      flex: 1;
-    }
-
-    .main h1 {
-      font-size: 26px;
-      color: var(--blue-dark);
-      margin-bottom: 10px;
-    }
-
-    .search-bar {
-      margin: 15px 0;
-    }
-
-    .search-bar input {
-      padding: 10px;
-      width: 100%;
-      max-width: 400px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .announcement {
-      background: var(--white);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px var(--shadow);
-      margin-top: 20px;
-    }
+    body{margin:0; display:flex; font-family:Arial; background:#0b0f15; color:#e5e7eb;}
+    .sidebar{width:220px; background:#111827; padding:20px; height:100vh;}
+    .sidebar a{display:block; padding:10px; margin:5px 0; color:#e5e7eb; text-decoration:none; border-radius:8px;}
+    .sidebar a:hover{background:#1f2937;}
+    .main{flex:1; padding:20px;}
+    .logout{color:#ef4444;}
+    input{padding:10px; width:100%; margin-bottom:10px; border-radius:8px; border:none;}
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
   <div class="sidebar">
-    <div>
-      <h2>CTS Lost & Found</h2>
-      <ul>
-        <li><a href="dashboard.html">Home</a></li>
-        <li><a href="report.html">Report</a></li>
-        <li><a href="support.html">Support</a></li>
-      </ul>
-    </div>
-    <div class="logout">
-      <a href="index.html">Logout</a>
-    </div>
+    <h2>CTS Lost&Found</h2>
+    <a href="dashboard.html">Home</a>
+    <a href="report.html">Report</a>
+    <a href="support.html">Support</a>
+    <a href="#" class="logout">Logout</a>
   </div>
-
-  <!-- Main -->
   <div class="main">
     <h1>Welcome to Dashboard</h1>
-
-    <div class="search-bar">
-      <input type="text" placeholder="Search for missing item...">
-    </div>
-
-    <div class="announcement">
-      <h2>📢 Announcements</h2>
-      <p>No new announcements at the moment.</p>
-    </div>
+    <p>📢 Announcements will appear here.</p>
+    <input type="text" placeholder="Search missing item...">
   </div>
+
+  <script>
+    document.querySelector(".logout").addEventListener("click",async(e)=>{
+      e.preventDefault(); await supabase.auth.signOut(); window.location="index.html";
+    });
+  </script>
 </body>
 </html>
