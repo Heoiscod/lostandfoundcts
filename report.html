@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Missing Item - CTS E-Lost & Found</title>
+  <style>
+    :root {
+      --blue: #2563eb;
+      --blue-dark: #1e3a8a;
+      --white: #ffffff;
+      --gray: #f9fafb;
+      --gray-dark: #6b7280;
+      --shadow: rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--gray);
+      margin: 0;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(to bottom, var(--blue-dark), var(--blue));
+      color: var(--white);
+      height: 100vh;
+      padding: 20px;
+      box-shadow: 2px 0 6px var(--shadow);
+      position: fixed;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: var(--white);
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 6px;
+      margin: 6px 0;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Main */
+    .main-content {
+      margin-left: 240px;
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    
+    }
+
+    .form-box {
+      background: var(--white);
+      padding: 50px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px var(--shadow);
+      max-width: 600px;
+      width: 100%;
+      margin-top: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--blue-dark);
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: var(--blue);
+      color: var(--white);
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>CTS Lost & Found</h2>
+    <a href="dashboard.html">Home</a>
+    <a href="report.html">Report</a>
+    <a href="support.html">Support</a>
+    <a href="index.html">Logout</a>
+  </div>
+
+  <div class="main-content">
+    <div class="form-box">
+      <h2>Report a Missing Item</h2>
+      <form action="#" method="post" enctype="multipart/form-data">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">-- Select Category --</option>
+          <option>Money/Wallet</option>
+          <option>Gadgets</option>
+          <option>Accessories</option>
+          <option>Receipts/IDs</option>
+        </select>
+
+        <label for="itemImage">Upload Item Picture</label>
+        <input type="file" id="itemImage" name="itemImage" accept="image/*" required>
+
+        <label for="name">Your Name (optional)</label>
+        <input type="text" id="name" name="name" placeholder="Leave blank for Anonymous">
+
+        <label for="contact">Contact Number</label>
+        <input type="text" id="contact" name="contact">
+
+        <label for="facebook">Facebook Link</label>
+        <input type="url" id="facebook" name="facebook">
+
+        <label for="info">Additional Information</label>
+        <textarea id="info" name="info" rows="4"></textarea>
+
+        <button type="submit">Submit Report</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
