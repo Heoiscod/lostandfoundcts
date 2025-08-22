@@ -6,103 +6,93 @@
 <title>Login - CTS E-Lost & Found</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* Main container centered */
-main.container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-}
-
-/* Form styling */
-form.auth-form {
-  background: var(--white);
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+/* Auth Form Styling */
+.auth-form {
+  background: #fff;
+  max-width: 420px;
   width: 100%;
-  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   text-align: center;
 }
 
-form.auth-form .form-group {
-  margin-bottom: 15px;
+.auth-form h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  color: #222;
 }
 
-form.auth-form input {
+.auth-form .tagline {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.auth-form .form-group {
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.auth-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.auth-form input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 0.9rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  transition: 0.3s;
-}
-
-form.auth-form input:focus {
-  border-color: var(--blue);
+  font-size: 1rem;
   outline: none;
+  transition: border-color 0.3s;
 }
 
-/* Buttons */
-.btn.primary {
+.auth-form input:focus {
+  border-color: #0077ff;
+  box-shadow: 0 0 6px rgba(0,119,255,0.2);
+}
+
+.auth-form .btn.primary {
   width: 100%;
-  padding: 12px;
-  background: var(--blue);
-  color: var(--white);
+  padding: 0.9rem;
+  background: #0077ff;
+  color: #fff;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s;
 }
 
-.btn.primary:hover {
-  background: var(--blue-dark);
+.auth-form .btn.primary:hover {
+  background: #005fcc;
 }
 
-/* Alt link below form */
-.alt-link {
-  margin-top: 15px;
-  text-align: center;
+.auth-form .alt-link {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
 }
 
-.alt-link a {
-  color: var(--blue);
+.auth-form .alt-link a {
+  color: #0077ff;
   text-decoration: none;
   font-weight: bold;
 }
 
-.alt-link a:hover {
+.auth-form .alt-link a:hover {
   text-decoration: underline;
-}
-
-/* Responsive */
-@media (max-width: 500px) {
-  form.auth-form {
-    padding: 20px;
-  }
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px 20px;
-  }
-  nav ul {
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    margin-top: 10px;
-  }
-  nav ul li a {
-    width: 100%;
-    text-align: center;
-  }
 }
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">
+  <div class="logo-title">
     <img src="images/logo.webp" alt="CTS Logo">
     <h1>CTS E-Lost & Found</h1>
   </div>
@@ -141,6 +131,21 @@ form.auth-form input:focus {
 </footer>
 
 <script>
+// Header scroll effect
+let prevScrollPos = window.pageYOffset;
+const logoTitle = document.querySelector(".logo-title");
+
+window.addEventListener("scroll", () => {
+  let currentScrollPos = window.pageYOffset;
+  if (currentScrollPos > prevScrollPos) {
+    logoTitle.classList.add("hidden");
+  } else {
+    logoTitle.classList.remove("hidden");
+  }
+  prevScrollPos = currentScrollPos;
+});
+
+// Login form
 document.getElementById("loginForm").addEventListener("submit", function(e){
   e.preventDefault();
   const email = document.getElementById("email").value;
