@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register - CTS E-Lost & Found</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
+   const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
     const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
     const supabase = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
@@ -181,33 +180,67 @@
   </style>
 </head>
 <body>
-  <form id="registerForm">
-    <h2>Register</h2>
-    <input type="text" id="fullname" placeholder="Full Name" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <input type="password" id="confirm" placeholder="Confirm Password" required>
-    <button type="submit">Register</button>
-  </form>
+  <!-- Header -->
+  <header>
+    <div class="logo-title">
+      <img src="images/logo.webp" alt="CTS Logo">
+      <h1>CTS E-LOST AND FOUND</h1>
+    </div>
+    <nav>
+      <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="search.html">Search Items</a></li>
+      <li><a href="login.html" class="active">Login</a></li>
+      <li><a href="register.html">Register</a></li>
+    </ul>
+    </nav>
+  </header>
+
+  <!-- Register Form -->
+  <main class="container">
+    <h2>Create an Account</h2>
+    <form action="submit_register.php" method="post">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" name="fullname" required>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+
+      <label for="confirm">Confirm Password</label>
+      <input type="password" id="confirm" name="confirm" required>
+
+      <button type="submit" class="btn">Register</button>
+
+      <div class="login-link">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
+    </form>
+  </main>
+
+  <footer>
+    &copy; 2025 CTS E-Lost & Found. All rights reserved.
+  </footer>
 
   <script>
-    document.getElementById("registerForm").addEventListener("submit", async (e)=>{
-      e.preventDefault();
-      const fullname=document.getElementById("fullname").value;
-      const email=document.getElementById("email").value;
-      const username=document.getElementById("username").value;
-      const password=document.getElementById("password").value;
-      const confirm=document.getElementById("confirm").value;
-      if(password!==confirm){ alert("❌ Passwords don't match"); return;}
-      const { data,error }=await supabase.auth.signUp({
-        email,password,options:{ data:{ fullname,username } }
-      });
-      if(error) alert(error.message);
-      else{ alert("✅ Registered! Check email to confirm."); window.location="login.html";}
+    // Hide logo-title on scroll down, show on scroll up
+    const logoTitle = document.querySelector(".logo-title");
+    let lastScroll = 0;
+
+    window.addEventListener("scroll", () => {
+      let currentScroll = window.scrollY;
+      if (currentScroll > lastScroll && currentScroll > 50) {
+        logoTitle.classList.add("hidden");
+      } else {
+        logoTitle.classList.remove("hidden");
+      }
+      lastScroll = currentScroll;
     });
   </script>
 </body>
 </html>
-
-
