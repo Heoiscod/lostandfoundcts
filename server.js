@@ -1,129 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Search Items - CTS E-Lost & Found</title>
-<link rel="stylesheet" href="style.css">
-<style>
-main.container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 40px 20px;
-}
-.search-box {
-  display: flex;
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 30px;
-}
-.search-box input {
-  flex: 1;
-  padding: 12px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px 0 0 8px;
-  outline: none;
-  font-size: 16px;
-}
-.search-box button {
-  padding: 12px 20px;
-  border: none;
-  background: var(--blue);
-  color: var(--white);
-  border-radius: 0 8px 8px 0;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-.search-box button:hover { background: #1e3a8a; }
-.results { width: 100%; max-width: 400px; }
-.result-item {
-  background: var(--white);
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-.result-item h3 { margin-bottom: 5px; }
-.result-item p { margin: 0; color: var(--gray); }
+// server.js
+const express = require("express");
+const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { createClient } = require("@supabase/supabase-js");
 
-@media (max-width: 500px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px 20px;
-  }
-  nav ul {
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    margin-top: 10px;
-  }
-  nav ul li a {
-    width: 100%;
-    text-align: center;
-  }
-  .search-box {
-    flex-direction: column;
-  }
-  .search-box input, .search-box button {
-    border-radius: 8px;
-    width: 100%;
-    margin-bottom: 10px;
-  }
-}
-</style>
-</head>
-<body>
-<header>
-<div class="logo">
-  <img src="images/logo.webp" alt="CTS Logo">
-  <h1>CTS E-Lost & Found</h1>
-</div>
-<nav>
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="search.html" class="active">Search Items</a></li>
-    <li><a href="login.html">Login</a></li>
-    <li><a href="register.html">Register</a></li>
-  </ul>
-</nav>
-</header>
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-<main class="container">
-<h2>Search Lost & Found Items</h2>
-<div class="search-box">
-  <input type="text" id="searchInput" placeholder="Search items (e.g., phone)">
-  <button id="searchBtn">Search</button>
-</div>
-<div class="results" id="results"></div>
-</main>
+// ================== SUPABASE CONFIG ==================
+const SUPABASE_URL = "https://wayiqcnkthghfszchcly.supabase.co";
+const SUPABASE_SERVICE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg"; // use service role key
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-<footer>
-<p>© 2025 CTS-C E-Lost & Found. All rights reserved.</p>
-</footer>
+// JWT Secret
+const JWT_SECRET = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTg5NTQ2MywiZXhwIjoyMDcxNDcxNDYzfQ.NtOmommtS3TNwcbEBRRbygIXdB1glvhgxZGM4cffIwM";
 
-<script>
-const searchBtn = document.getElementById('searchBtn');
-const searchInput = document.getElementById('searchInput');
-const resultsDiv = document.getElementById('results');
-
-searchBtn.addEventListener('click', ()=>{
-  const query = searchInput.value.toLowerCase();
-  resultsDiv.innerHTML = '';
-  let items = JSON.parse(localStorage.getItem('lostFoundItems') || '[]');
-  let filtered = items.filter(item => item.name.toLowerCase().includes(query));
-  if(filtered.length===0){ resultsDiv.innerHTML='<p>No items found.</p>'; return; }
-  filtered.forEach(item=>{
-    const div = document.createElement('div');
-    div.classList.add('result-item');
-    div.innerHTML = `<h3>${item.name}</h3><p>${item.details}</p>`;
-    resultsDiv.appendChild(div);
-  });
+// ================== TEST ROUTE ==================
+app.get("/", (req, res) => {
+  res.send("Supabase Lost & Found Backend is running ✅");
 });
-</script>
-</body>
-</html>
+
+// ================== USER AUTH ==================
+
+// Register (directly add user, no email verification)
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password)
+    return res.status(400).json({ error: "All fields are required" });
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const { data, error } = await supabase
+    .from("users")
+    .insert([{ username, password: hashedPassword }]);
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ message: "User registered successfully ✅", data });
+});
+
+// Login (check username + password)
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", username);
+
+  if (error) return res.status(500).json({ error: error.message });
+  if (data.length === 0) return res.status(401).json({ error: "Invalid credentials" });
+
+  const user = data[0];
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
+
+  // Generate JWT Token
+  const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: "1h" });
+  res.json({ message: "Login successful ✅", token });
+});
+
+// ================== LOST & RETURN ITEMS ==================
+
+// Add Lost Item
+app.post("/lost", async (req, res) => {
+  const { item_name, description, location } = req.body;
+  const { data, error } = await supabase
+    .from("lost_items")
+    .insert([{ item_name, description, location }]);
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ message: "Lost item added successfully ✅", data });
+});
+
+// Add Returned Item
+app.post("/return", async (req, res) => {
+  const { item_name, description, location } = req.body;
+  const { data, error } = await supabase
+    .from("return_items")
+    .insert([{ item_name, description, location }]);
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ message: "Returned item recorded successfully ✅", data });
+});
+
+// Fetch Lost Items
+app.get("/lost", async (req, res) => {
+  const { data, error } = await supabase.from("lost_items").select("*");
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
+
+// Fetch Returned Items
+app.get("/return", async (req, res) => {
+  const { data, error } = await supabase.from("return_items").select("*");
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
+
+// ================== START SERVER ==================
+const PORT = 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
