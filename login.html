@@ -11,13 +11,89 @@
     const supabase = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
   <style>
-    body{background:#0b0f15; display:flex; justify-content:center; align-items:center; height:100vh; color:#e5e7eb; font-family:Arial;}
-    form{background:#111827; padding:25px; border-radius:12px; width:100%; max-width:350px; box-shadow:0 0 10px rgba(0,0,0,.5);}
-    h2{text-align:center; margin-bottom:15px; color:#58a6ff;}
-    input{width:100%; padding:10px; margin:8px 0; border-radius:8px; border:none;}
-    button{width:100%; padding:10px; background:#58a6ff; color:white; border:none; border-radius:8px;}
-    button:hover{background:#3b82f6;}
-  </style>
+/* Auth Form Styling */
+.auth-form {
+  background: #fff;
+  max-width: 420px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.auth-form h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  color: #222;
+}
+
+.auth-form .tagline {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.auth-form .form-group {
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.auth-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.auth-form input:focus {
+  border-color: #0077ff;
+  box-shadow: 0 0 6px rgba(0,119,255,0.2);
+}
+
+.auth-form .btn.primary {
+  width: 100%;
+  padding: 0.9rem;
+  background: #0077ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.auth-form .btn.primary:hover {
+  background: #005fcc;
+}
+
+.auth-form .alt-link {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.auth-form .alt-link a {
+  color: #0077ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-form .alt-link a:hover {
+  text-decoration: underline;
+}
+</style>
 </head>
 <body>
   <form id="loginForm">
@@ -39,4 +115,5 @@
   </script>
 </body>
 </html>
+
 
