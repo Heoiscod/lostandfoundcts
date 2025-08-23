@@ -105,10 +105,13 @@
     .toast.show{display:block}
 
     /* Responsive */
-    @media (max-width:600px){
-      .navbar ul{flex-direction:column;align-items:center}
-      .chat-message{max-width:100%}
-    }
+   @media (max-width:600px){
+  .navbar ul{
+    flex-direction: row; /* keep horizontal */
+    overflow-x: auto;    /* allow scrolling if too wide */
+    gap: 10px;           /* optional smaller gap on small screens */
+  }
+}
   </style>
 </head>
 <body>
@@ -254,3 +257,4 @@ loadMessages();
 </script>
 </body>
 </html>
+
