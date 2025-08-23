@@ -49,18 +49,105 @@
   --white: #ffffff;
   --gray: #f9fafb;
   --gray-dark: #6b7280;
-  --shadow: rgba(0,0,0,0.15);
+  --shadow: rgba(0, 0, 0, 0.15);
   --accent: #fbbf24;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: "Segoe UI", Arial, sans-serif; background: var(--gray); padding-top: 70px; color: #111; }
-header { background: linear-gradient(to right, var(--blue-dark), var(--blue)); color: var(--white); position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px var(--shadow); }
-.logo-title { display: flex; align-items: center; gap: 10px; padding: 12px 30px; transition: all 0.3s; }
-.logo-title img { height: 40px; }
-.logo-title.hidden { opacity: 0; height: 0; overflow: hidden; padding: 0 30px; }
-nav ul { list-style: none; display: flex; justify-content: center; gap: 20px; padding: 10px 0; flex-wrap: wrap; }
-nav ul li a { color: var(--white); text-decoration: none; font-weight: 500; border-radius: 6px; padding: 6px 10px; transition: all 0.3s; }
-nav ul li a:hover { background: var(--accent); color: var(--blue-dark); transform: scale(1.05); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+
+/* =========================
+   General Reset
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--gray);
+  color: #111;
+  line-height: 1.6;
+  padding-top: 70px; /* space for fixed header */
+}
+
+
+/* =========================
+   Header
+========================= */
+header {
+  background: linear-gradient(to right, var(--blue-dark), var(--blue));
+  color: var(--white);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+/* Logo + Title */
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 30px;
+  transition: opacity 0.3s ease, height 0.3s ease, padding 0.3s ease;
+}
+
+.logo-title img {
+  height: 40px;
+}
+
+.logo-title h1 {
+  font-size: 18px;
+  font-weight: bold;
+  align-self: center;
+}
+
+.logo-title.hidden {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  padding: 0 30px;
+}
+
+/* Navigation */
+nav {
+  background: rgba(0,0,0,0.1); /* subtle separator */
+  padding: 10px 20px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+nav ul li a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: 6px;
+  transition: all 0.3s ease; /* smooth transition */
+}
+nav ul li a:hover {
+  background: var(--accent); /* yellow accent color */
+  color: var(--blue-dark);    /* text color change */
+  transform: scale(1.05);     /* slight zoom effect */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+
+
+  header .logo h1 {
+    font-size: 16px;
+  }
+
 
 main.container { max-width: 600px; margin: auto; padding: 20px; }
 h2 { font-size: 28px; color: var(--blue-dark); text-align: center; margin-bottom: 10px; margin-top: 20px; }
@@ -134,3 +221,4 @@ window.addEventListener("scroll", () => {
 </script>
 </body>
 </html>
+
