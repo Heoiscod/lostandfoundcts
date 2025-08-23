@@ -91,6 +91,15 @@ nav ul li a {
   text-decoration: none;
   font-weight: 500;
   white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease; /* smooth transition */
+}
+nav ul li a:hover {
+  background: var(--accent); /* yellow accent color */
+  color: var(--blue-dark);    /* text color change */
+  transform: scale(1.05);     /* slight zoom effect */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 
@@ -139,7 +148,7 @@ h2 {
 }
 
 .btn.primary:hover {
-  background: #1d4ed8;
+  background: var(--accent); /* yellow accent color */
 }
 
 .btn.secondary {
@@ -222,4 +231,3 @@ footer {
   margin-top: 40px;
   font-size: 14px;
 }
-
