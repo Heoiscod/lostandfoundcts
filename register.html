@@ -16,37 +16,47 @@
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: "Segoe UI", Arial, sans-serif; background: var(--gray); color: #111; line-height: 1.6; padding-top: 70px; }
+
+    /* Header */
     header { background: linear-gradient(to right, var(--blue-dark), var(--blue)); color: var(--white); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px var(--shadow); }
     .logo-title { display: flex; align-items: center; gap: 10px; padding: 12px 30px; transition: opacity 0.3s ease, height 0.3s ease, padding 0.3s ease; }
     .logo-title img { height: 40px; }
     .logo-title h1 { font-size: 18px; font-weight: bold; }
     .logo-title.hidden { opacity: 0; height: 0; overflow: hidden; padding: 0 30px; }
+
     nav { background: rgba(0,0,0,0.1); padding: 10px 20px; }
     nav ul { list-style: none; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
     nav ul li a {
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 500;
-  white-space: nowrap;
-  border-radius: 6px;
-  transition: all 0.3s ease; /* smooth transition */
-}
-nav ul li a:hover {
-  background: var(--accent); /* yellow accent color */
-  color: var(--blue-dark);    /* text color change */
-  transform: scale(1.05);     /* slight zoom effect */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+      white-space: nowrap;
+      border-radius: 6px;
+      padding: 6px 12px;
+      transition: all 0.3s ease;
+    }
+    nav ul li a:hover, nav ul li a.active {
+      background: var(--accent);
+      color: var(--blue-dark);
+      transform: scale(1.05);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
 
+    /* Main container */
     main.container { max-width: 500px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px var(--shadow); text-align: left; }
     main.container h2 { text-align: center; font-size: 28px; color: var(--blue-dark); margin-bottom: 20px; }
+
     form label { display: block; font-weight: 600; margin-bottom: 5px; color: var(--blue-dark); }
     form input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; }
     form input:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 4px var(--blue); }
+
     .btn { display: inline-block; padding: 12px; width: 100%; border-radius: 6px; font-weight: 600; font-size: 16px; text-decoration: none; background: var(--blue); color: var(--white); border: none; cursor: pointer; transition: 0.3s ease; }
     .btn:hover { background: #1d4ed8; }
+
     .login-link { text-align: center; margin-top: 15px; font-size: 14px; color: var(--gray-dark); }
     .login-link a { color: var(--blue); text-decoration: none; }
+
+    /* Footer */
     footer { background: var(--blue-dark); color: var(--white); text-align: center; padding: 15px; margin-top: 40px; font-size: 14px; }
   </style>
 </head>
@@ -58,10 +68,10 @@ nav ul li a:hover {
   </div>
   <nav>
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="search.html">Search Items</a></li>
-      <li><a href="login.html" class="active">Login</a></li>
-      <li><a href="register.html">Register</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/search">Search Items</a></li>
+      <li><a href="/login">Login</a></li>
+      <li><a href="/register" class="active">Register</a></li>
     </ul>
   </nav>
 </header>
@@ -86,7 +96,7 @@ nav ul li a:hover {
 
     <button type="submit" class="btn">Register</button>
     <div class="login-link">
-      Already have an account? <a href="login.html">Login here</a>
+      Already have an account? <a href="/login">Login here</a>
     </div>
   </form>
 </main>
@@ -98,8 +108,9 @@ nav ul li a:hover {
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+// Supabase setup
 const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+const supabaseKey = "YOUR_SUPABASE_KEY"; // Replace with your Supabase anon key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const form = document.getElementById("registerForm");
@@ -120,7 +131,7 @@ form.addEventListener("submit", async (e) => {
 
   const { data, error } = await supabase
     .from("users")
-    .insert([{ name: fullname, username, email, password }]); // ✅ use 'name' column
+    .insert([{ name: fullname, username, email, password }]);
 
   if (error) {
     alert("Registration failed: " + error.message);
@@ -128,7 +139,7 @@ form.addEventListener("submit", async (e) => {
   } else {
     alert("User registered successfully ✅");
     form.reset();
-    window.location.href = "login.html";
+    window.location.href = "/login"; // clean URL redirect
   }
 });
 
