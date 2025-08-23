@@ -14,7 +14,16 @@
   --gray:#f9fafb; --gray-dark:#6b7280; --shadow:rgba(0,0,0,.15);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Segoe UI",Arial,sans-serif;background:var(--gray);color:#111;min-height:100vh;display:flex;flex-direction:column}
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: url('images/background.gif') no-repeat center center fixed;
+  background-size: cover;
+  color: #111;
+  line-height: 1.6;
+
+}
 
 /* Navbar */
 .navbar {
@@ -53,7 +62,7 @@ body{font-family:"Segoe UI",Arial,sans-serif;background:var(--gray);color:#111;m
 .announcement th{background:var(--blue); color:#fff; border-radius:6px;}
 
 /* Chat */
-.chat-container{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px var(--shadow);margin-top:20px;width:100%}
+.chat-container{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px var(--shadow);margin-top:20px;margin-bottom:100px;width :100%}
 .chat-messages{max-height:300px;overflow-y:auto;border:1px solid #ddd;padding:10px;margin-bottom:10px;border-radius:6px}
 .chat-message{margin-bottom:8px;padding:6px 10px;border-radius:6px;max-width:80%;word-wrap:break-word}
 .chat-message span{display:block;font-size:12px;color:gray;margin-top:2px}
@@ -202,7 +211,7 @@ async function loadAnnouncements(){
   data.forEach(item=>{
     const tr=document.createElement("tr");
     const date = new Date(item.created_at).toLocaleDateString();
-    tr.innerHTML=`<td>${item.title}</td><td>${item.body}</td><td>${date}</td>`;
+    tr.innerHTML=`<td><b>${item.title}</b></td><td><i>${item.body}</i></td>`;
     announcementBody.appendChild(tr);
   });
 }
@@ -210,7 +219,7 @@ async function loadAnnouncements(){
 function addAnnouncementItem(item){
   const tr=document.createElement("tr");
   const date=new Date(item.created_at).toLocaleDateString();
-  tr.innerHTML=`<td>${item.title}</td><td>${item.body}</td><td>${date}</td>`;
+  tr.innerHTML=`<b>${item.title}</b><td>${item.body}</td>`;
   announcementBody.prepend(tr);
 }
 
