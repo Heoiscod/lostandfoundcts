@@ -1,240 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Items - CTS E-Lost & Found</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script>
-    const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
-    const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
-    const supabase=supabase.createClient(supabaseUrl,supabaseKey);
-  </script>
-  <style>
-    /* ========================= 
-       Root Variables
-    ========================= */
-    :root {
-      --blue: #2563eb;
-      --blue-dark: #1e3a8a;
-      --white: #ffffff;
-      --gray: #f9fafb;
-      --gray-dark: #6b7280;
-      --shadow: rgba(0, 0, 0, 0.15);
-      --accent: #fbbf24;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search Items - CTS E-Lost & Found</title>
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchForm = document.querySelector(".search-box");
+    const resultsContainer = document.querySelector(".results");
+
+    async function displayItems(keyword = "") {
+      const { data: items, error } = await supabase
+        .from("items")
+        .select("*")
+        .ilike("title", `%${keyword}%`)
+        .order("created_at", { ascending: false });
+
+      
+
+      items.forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("result-item");
+        div.innerHTML = `<h3>${item.title}</h3><p>${item.description}</p>`;
+        resultsContainer.appendChild(div);
+      });
     }
 
-    /* =========================
-       General Reset
-    ========================= */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    // Initial display (all items)
+    displayItems();
 
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: var(--gray);
-      color: #111;
-      line-height: 1.6;
-      padding-top: 70px; /* space for fixed header */
-    }
-
-    /* =========================
-       Header
-    ========================= */
-    header {
-      background: linear-gradient(to right, var(--blue-dark), var(--blue));
-      color: var(--white);
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      box-shadow: 0 2px 8px var(--shadow);
-    }
-
-    .logo-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 30px;
-      transition: opacity 0.3s ease, height 0.3s ease, padding 0.3s ease;
-    }
-
-    .logo-title img {
-      height: 40px;
-    }
-
-    .logo-title h1 {
-      font-size: 18px;
-      font-weight: bold;
-      align-self: center;
-    }
-
-    .logo-title.hidden {
-      opacity: 0;
-      height: 0;
-      overflow: hidden;
-      padding: 0 30px;
-    }
-
-    nav {
-      background: rgba(0,0,0,0.1);
-      padding: 10px 20px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    nav ul li a {
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 500;
-  white-space: nowrap;
-  border-radius: 6px;
-  transition: all 0.3s ease; /* smooth transition */
+    searchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const keyword = searchForm.querySelector("input").value.trim();
+      displayItems(keyword);
+    });
+  });
+</script>
+<style>
+:root {
+  --blue: #2563eb;
+  --blue-dark: #1e3a8a;
+  --white: #ffffff;
+  --gray: #f9fafb;
+  --gray-dark: #6b7280;
+  --shadow: rgba(0,0,0,0.15);
+  --accent: #fbbf24;
 }
-nav ul li a:hover {
-  background: var(--accent); /* yellow accent color */
-  color: var(--blue-dark);    /* text color change */
-  transform: scale(1.05);     /* slight zoom effect */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-    /* =========================
-       Main Content
-    ========================= */
-    main.container {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-    }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Segoe UI", Arial, sans-serif; background: var(--gray); padding-top: 70px; color: #111; }
+header { background: linear-gradient(to right, var(--blue-dark), var(--blue)); color: var(--white); position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 8px var(--shadow); }
+.logo-title { display: flex; align-items: center; gap: 10px; padding: 12px 30px; transition: all 0.3s; }
+.logo-title img { height: 40px; }
+.logo-title.hidden { opacity: 0; height: 0; overflow: hidden; padding: 0 30px; }
+nav ul { list-style: none; display: flex; justify-content: center; gap: 20px; padding: 10px 0; flex-wrap: wrap; }
+nav ul li a { color: var(--white); text-decoration: none; font-weight: 500; border-radius: 6px; padding: 6px 10px; transition: all 0.3s; }
+nav ul li a:hover { background: var(--accent); color: var(--blue-dark); transform: scale(1.05); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
 
-    h2 {
-      font-size: 28px;
-      color: var(--blue-dark);
-      margin-bottom: 10px;
-      margin-top: 20px;
-      text-align: center;
-    }
+main.container { max-width: 600px; margin: auto; padding: 20px; }
+h2 { font-size: 28px; color: var(--blue-dark); text-align: center; margin-bottom: 10px; margin-top: 20px; }
+.tagline { font-size: 16px; color: var(--gray-dark); text-align: center; margin-bottom: 20px; }
 
-    .tagline {
-      font-size: 16px;
-      color: var(--gray-dark);
-      margin-bottom: 20px;
-      text-align: center;
-    }
+form.search-box { background: var(--white); padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px var(--shadow); display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+form.search-box input[type="text"] { flex: 1; min-width: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; }
+form.search-box button { background: var(--blue); color: var(--white); border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+form.search-box button:hover { background: #1e3a8a; }
 
-    /* Search Form */
-    form.search-box {
-      background: var(--white);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px var(--shadow);
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+.results { margin-top: 30px; }
+.result-item { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 2px 6px var(--shadow); margin-bottom: 15px; text-align: left; }
+.result-item h3 { color: var(--blue-dark); margin-bottom: 5px; }
+.result-item p { color: var(--gray-dark); font-size: 14px; }
 
-    form.search-box input[type="text"] {
-      flex: 1;
-      min-width: 200px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      outline: none;
-    }
-
-    form.search-box button {
-      background: var(--blue);
-      color: var(--white);
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    form.search-box button:hover {
-      background: var(--accent);
-    }
-
-    /* Results */
-    .results {
-      margin-top: 30px;
-    }
-
-    .result-item {
-      background: var(--white);
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px var(--shadow);
-      margin-bottom: 15px;
-      text-align: left;
-    }
-
-    .result-item h3 {
-      color: var(--blue-dark);
-      margin-bottom: 5px;
-    }
-
-    .result-item p {
-      color: var(--gray-dark);
-      font-size: 14px;
-    }
-
-    /* =========================
-       Footer
-    ========================= */
-    footer {
-      background: var(--blue-dark);
-      color: var(--white);
-      text-align: center;
-      padding: 15px;
-      margin-top: 40px;
-      font-size: 14px;
-    }
-  </style>
+footer { background: var(--blue-dark); color: var(--white); text-align: center; padding: 15px; margin-top: 40px; font-size: 14px; }
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="logo-title" id="logoTitle">
-      <img src="images/logo.webp" alt="CTS Logo">
-         <h1>CTS E-Lost & Found</h1>
-    </div>
-    <nav>
+<header>
+  <div class="logo-title" id="logoTitle">
+    <img src="images/logo.webp" alt="CTS Logo">
+    <h1>CTS E-Lost & Found</h1>
+  </div>
+  <nav>
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="search.html">Search Items</a></li>
-      <li><a href="login.html" class="active">Login</a></li>
-      <li><a href="register.html">Register</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/search" class="active">Search Items</a></li>
+      <li><a href="/login">Login</a></li>
+      <li><a href="/register">Register</a></li>
     </ul>
   </nav>
-    </nav>
-  </header>
+</header>
 
-  <!-- Main -->
-  <main class="container">
-    <h2>Search Lost & Found Items</h2>
-    <p class="tagline">Find items that were reported lost or found in our campus.</p>
+<main class="container">
+  <h2>Search Lost & Found Items</h2>
+  <p class="tagline">Find items that were reported lost or found in our campus.</p>
 
-    <form class="search-box">
-      <input type="text" placeholder="Enter keyword (e.g. bag, phone, ID)">
-      <button type="submit">Search</button>
-    </form>
+  <form class="search-box">
+    <input type="text" placeholder="Enter keyword (e.g. bag, phone, ID)">
+    <button type="submit">Search</button>
+  </form>
 
-    <div class="results">
+  
+  <div class="results">
       <div class="result-item">
         <h3>Black Backpack</h3>
         <p>Found at library, contains notebooks and pens.</p>
@@ -244,28 +115,22 @@ nav ul li a:hover {
         <p>Lost near cafeteria, name: Juan Dela Cruz.</p>
       </div>
     </div>
-  </main>
+</main>
 
-  <footer>
-    &copy; 2025 CTS E-Lost & Found. All Rights Reserved.
-  </footer>
+<footer>
+  &copy; 2025 CTS E-Lost & Found. All Rights Reserved.
+</footer>
 
-  <!-- Scroll Hide Logo -->
-  <script>
-    let lastScroll = 0;
-    const logoTitle = document.getElementById("logoTitle");
+<script>
+let lastScroll = 0;
+const logoTitle = document.getElementById("logoTitle");
 
-    window.addEventListener("scroll", () => {
-      const currentScroll = window.scrollY;
-      if (currentScroll > lastScroll) {
-        logoTitle.classList.add("hidden");
-      } else {
-        logoTitle.classList.remove("hidden");
-      }
-      lastScroll = currentScroll;
-    });
-  </script>
+window.addEventListener("scroll", () => {
+  const currentScroll = window.scrollY;
+  if (currentScroll > lastScroll) logoTitle.classList.add("hidden");
+  else logoTitle.classList.remove("hidden");
+  lastScroll = currentScroll;
+});
+</script>
 </body>
 </html>
-
-
