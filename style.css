@@ -143,11 +143,12 @@ h2 {
 .btn.primary {
   background: var(--blue);
   color: var(--white);
+   margin-top: 30px;
 }
 
 .btn.primary:hover {
   background: var(--accent);
-   margin-top: 30px;
+  
 }
 
 .btn.secondary {
@@ -230,4 +231,5 @@ footer {
   margin-top: 40px;
   font-size: 14px;
 }
+
 
