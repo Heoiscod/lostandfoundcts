@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CTS Lost & Found - Dashboard</title>
-   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-   const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
-    const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+    const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
     const supabase = supabase.createClient(supabaseUrl, supabaseKey);
   </script>
-  <style>
+    <style>
     :root {
       --blue: #2563eb;
       --blue-dark: #1e3a8a;
@@ -144,13 +144,13 @@
       </ul>
     </div>
     <div class="logout">
-      <a href="index.html">Logout</a>
+      <a href="#" id="logoutBtn">Logout</a>
     </div>
   </div>
 
   <!-- Main -->
   <div class="main">
-    <h1>Welcome to Dashboard</h1>
+    <h1>Welcome, <span id="userName"></span>!</h1>
 
     <div class="search-bar">
       <input type="text" placeholder="Search for missing item...">
@@ -158,8 +158,28 @@
 
     <div class="announcement">
       <h2>📢 Announcements</h2>
-      <p>No new announcements at the moment.</p>
+      <p>Maintenance work will be carried out on end of August.</p>
+      <h2>🔔 I'll be Polishing this one PROGRESS.</h2>
     </div>
   </div>
+
+<script>
+// Check if user is logged in
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (!currentUser) {
+  // Not logged in → redirect to login page
+  window.location.href = "login.html";
+} else {
+  // Display user name
+  document.getElementById("userName").textContent = currentUser.name;
+}
+
+// Logout functionality
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("currentUser");
+  window.location.href = "login.html";
+});
+</script>
+
 </body>
 </html>
