@@ -1,159 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Report Missing Item - CTS E-Lost & Found</title>
-   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script>
-   const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
-    const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
-    const supabase=supabase.createClient(supabaseUrl,supabaseKey);
-  </script>
-  <style>
-    :root {
-      --blue: #2563eb;
-      --blue-dark: #1e3a8a;
-      --white: #ffffff;
-      --gray: #f9fafb;
-      --gray-dark: #6b7280;
-      --shadow: rgba(0, 0, 0, 0.15);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Missing Item - CTS Lost & Found</title>
 
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: var(--gray);
-      margin: 0;
-      display: flex;
-    }
+<!-- Supabase CDN -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-    /* Sidebar */
-    .sidebar {
-      width: 220px;
-      background: linear-gradient(to bottom, var(--blue-dark), var(--blue));
-      color: var(--white);
-      height: 100vh;
-      padding: 20px;
-      box-shadow: 2px 0 6px var(--shadow);
-      position: fixed;
-    }
+<style>
+:root {
+  --blue:#2563eb;
+  --blue-dark:#1e3a8a;
+  --white:#fff;
+  --gray:#f9fafb;
+  --gray-dark:#6b7280;
+  --shadow:rgba(0,0,0,.15);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:"Segoe UI",Arial,sans-serif;
+  background: url('images/background.gif') no-repeat center center fixed;
+  background-size: cover;
+  color:#111;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  padding-top:70px; /* space for fixed navbar */
+}
 
-    .sidebar h2 {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
+/* Navbar */
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  background: linear-gradient(to right, var(--blue-dark), var(--blue));
+  color: var(--white);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:12px 20px;
+  box-shadow:0 2px 6px var(--shadow);
+  gap:5px;
+  z-index:1000;
+}
+.nav-content{
+  width:100%;
+  max-width:1000px;
+  display:flex;
+  justify-content:center;
+}
+.nav-content ul{
+  list-style:none;
+  display:flex;
+  gap:20px;
+}
+.nav-content ul li a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:500;
+  padding:6px 10px;
+  border-radius:6px;
+  transition: background .3s;
+}
+.nav-content ul li a:hover{
+  background: rgba(255,255,255,.2);
+}
 
-    .sidebar a {
-      display: block;
-      color: var(--white);
-      text-decoration: none;
-      padding: 10px;
-      border-radius: 6px;
-      margin: 6px 0;
-      transition: background 0.3s;
-    }
+/* Main content */
+.main{
+  flex:1;
+  width:100%;
+  max-width:600px;
+  margin:20px auto 40px auto;
+  padding:20px;
+  background: var(--white);
+  border-radius:10px;
+  box-shadow:0 2px 6px var(--shadow);
+  margin-top: 100px;
+}
 
-    .sidebar a:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
+/* Form */
+h2{text-align:center;color:var(--blue-dark);margin-bottom:20px;}
+label{display:block;margin:10px 0 5px;font-weight:bold;}
+input, select, textarea, button{width:100%;padding:10px;border-radius:6px;border:1px solid #ddd;margin-bottom:15px;}
+textarea{resize:vertical;}
+button{
+  background: var(--blue);
+  color: var(--white);
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+  transition: background .3s;
+}
+button:hover{background: var(--blue-dark);}
 
-    /* Main */
-    .main-content {
-      margin-left: 240px;
-      padding: 20px;
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    
-    }
+/* Styled Upload Button */
+.upload-label{
+  display:block;
+  background: var(--blue);
+  color:#fff;
+  padding:10px;
+  text-align:center;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+  margin-bottom:15px;
+  transition: background .3s;
+}
+.upload-label:hover{background: var(--blue-dark);}
+#itemImage{display:none;}
 
-    .form-box {
-      background: var(--white);
-      padding: 50px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px var(--shadow);
-      max-width: 600px;
-      width: 100%;
-      margin-top: 30px;
-    }
+/* Image Preview */
+#preview{
+  width:100%;
+  max-width:300px;
+  margin-bottom:15px;
+  display:none;
+  border-radius:6px;
+  border:1px solid #ddd;
+}
 
-    h2 {
-      text-align: center;
-      color: var(--blue-dark);
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin: 10px 0 5px;
-      font-weight: bold;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      margin-bottom: 15px;
-    }
-
-    button {
-      background: var(--blue);
-      color: var(--white);
-      padding: 10px 15px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #1d4ed8;
-    }
-  </style>
+/* Responsive */
+@media (max-width:600px){
+  .nav-content ul{flex-direction:row;overflow-x:auto;gap:10px;}
+}
+</style>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>CTS Lost & Found</h2>
-    <a href="dashboard.html">Home</a>
-    <a href="report.html">Report</a>
-    <a href="support.html">Support</a>
-    <a href="index.html">Logout</a>
+
+<!-- Navbar -->
+<div class="navbar">
+  <h2>CTS Lost & Found</h2>
+  <div class="nav-content">
+    <ul>
+      <li><a href="dashboard.html">Home</a></li>
+      <li><a href="report.html">Report</a></li>
+      <li><a href="support.html">Support</a></li>
+      <li><a href="index.html">Logout</a></li>
+    </ul>
   </div>
+</div>
 
-  <div class="main-content">
-    <div class="form-box">
-      <h2>Report a Missing Item</h2>
-      <form action="#" method="post" enctype="multipart/form-data">
-        <label for="category">Category</label>
-        <select id="category" name="category" required>
-          <option value="">-- Select Category --</option>
-          <option>Money/Wallet</option>
-          <option>Gadgets</option>
-          <option>Accessories</option>
-          <option>Receipts/IDs</option>
-        </select>
+<!-- Main Form -->
+<div class="main">
+  <h2>Report a Missing Item</h2>
+  <form id="reportForm" enctype="multipart/form-data">
+    <label for="category">Category</label>
+    <select id="category" name="category" required>
+      <option value="">-- Select Category --</option>
+      <option>Money/Wallet</option>
+      <option>Gadgets</option>
+      <option>Accessories</option>
+      <option>Receipts/IDs</option>
+    </select>
 
-        <label for="itemImage">Upload Item Picture</label>
-        <input type="file" id="itemImage" name="itemImage" accept="image/*" required>
+    <label class="upload-label" for="itemImage">📷 Upload / Take Picture</label>
+    <input type="file" id="itemImage" name="itemImage" accept="image/*" capture="environment" required>
+    <img id="preview" alt="Image Preview">
 
-        <label for="name">Your Name (optional)</label>
-        <input type="text" id="name" name="name" placeholder="Leave blank for Anonymous">
+    <label for="name">Your Name (optional)</label>
+    <input type="text" id="name" name="name" placeholder="Leave blank for Anonymous">
 
-        <label for="contact">Contact Number</label>
-        <input type="text" id="contact" name="contact">
+    <label for="contact">Contact Number</label>
+    <input type="text" id="contact" name="contact">
 
-        <label for="facebook">Facebook Link</label>
-        <input type="url" id="facebook" name="facebook">
+    <label for="facebook">Facebook Link</label>
+    <input type="url" id="facebook" name="facebook">
 
-        <label for="info">Additional Information</label>
-        <textarea id="info" name="info" rows="4"></textarea>
+    <label for="info">Additional Information</label>
+    <textarea id="info" name="info" rows="4"></textarea>
 
-        <button type="submit">Submit Report</button>
-      </form>
-    </div>
-  </div>
+    <button type="submit">Submit Report</button>
+  </form>
+</div>
+
+<script>
+const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
+const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+const { createClient } = window.supabase;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const reportForm = document.getElementById('reportForm');
+const itemImage = document.getElementById('itemImage');
+const preview = document.getElementById('preview');
+
+// Show preview when file selected
+itemImage.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = () => {
+      preview.src = reader.result;
+      preview.style.display = 'block';
+    }
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = '';
+    preview.style.display = 'none';
+  }
+});
+
+reportForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const category = document.getElementById('category').value;
+  const name = document.getElementById('name').value || 'Anonymous';
+  const contact = document.getElementById('contact').value;
+  const facebook = document.getElementById('facebook').value;
+  const info = document.getElementById('info').value;
+
+  if (!itemImage.files.length) {
+    alert('Please upload or take a picture of the item.');
+    return;
+  }
+
+  const file = itemImage.files[0];
+  const fileName = `${Date.now()}_${file.name}`;
+
+  // Upload image to Supabase storage
+  const { data: uploadData, error: uploadError } = await supabase
+    .storage
+    .from('reports')
+    .upload(`images/${fileName}`, file);
+
+  if (uploadError) {
+    console.error(uploadError);
+    alert('Failed to upload image.');
+    return;
+  }
+
+  // Get public URL
+  const { data: urlData } = supabase
+    .storage
+    .from('reports')
+    .getPublicUrl(`images/${fileName}`);
+  const publicUrl = urlData.publicUrl;
+
+  // Insert report into database
+  const { data, error } = await supabase
+    .from('reports')
+    .insert([{
+      category,
+      item_image_url: publicUrl,
+      name,
+      contact,
+      facebook_link: facebook,
+      info
+    }]);
+
+  if (error) {
+    console.error(error);
+    alert('Failed to submit report.');
+    return;
+  }
+
+  alert('Report submitted successfully!');
+  reportForm.reset();
+  preview.src = '';
+  preview.style.display = 'none';
+});
+</script>
+
 </body>
 </html>
