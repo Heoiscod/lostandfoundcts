@@ -1,135 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CTS Lost & Found - Dashboard</title>
+
+  <!-- Supabase CDN -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script>
-    const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-  </script>
-    <style>
+
+  <style>
     :root {
-      --blue: #2563eb;
-      --blue-dark: #1e3a8a;
-      --white: #ffffff;
-      --gray: #f9fafb;
-      --gray-dark: #6b7280;
-      --shadow: rgba(0, 0, 0, 0.15);
+      --blue:#2563eb; --blue-dark:#1e3a8a; --white:#fff;
+      --gray:#f9fafb; --gray-dark:#6b7280; --shadow:rgba(0,0,0,.15);
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: var(--gray);
-      color: #111;
-      display: flex;
-      min-height: 100vh;
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:"Segoe UI",Arial,sans-serif;background:var(--gray);color:#111;display:flex;min-height:100vh}
 
     /* Sidebar */
-    .sidebar {
-      background: linear-gradient(to bottom, var(--blue-dark), var(--blue));
-      color: var(--white);
-      width: 220px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 2px 0 6px var(--shadow);
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-    }
-
-    .sidebar h2 {
-      font-size: 20px;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .sidebar ul li {
-      margin: 15px 0;
-    }
-
-    .sidebar ul li a {
-      color: var(--white);
-      text-decoration: none;
-      font-weight: 500;
-      display: block;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: background 0.3s;
-    }
-
-    .sidebar ul li a:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .logout {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .logout a {
-      display: inline-block;
-      padding: 10px 20px;
-      background: #ef4444;
-      color: var(--white);
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .logout a:hover {
-      background: #dc2626;
-    }
+    .sidebar{background:linear-gradient(to bottom,var(--blue-dark),var(--blue));color:var(--white);
+      width:220px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;
+      box-shadow:2px 0 6px var(--shadow);position:fixed;top:0;left:0;height:100%}
+    .sidebar h2{font-size:20px;margin-bottom:30px;text-align:center}
+    .sidebar ul{list-style:none}
+    .sidebar ul li{margin:15px 0}
+    .sidebar ul li a{color:#fff;text-decoration:none;font-weight:500;display:block;padding:8px 12px;border-radius:6px;transition:background .3s}
+    .sidebar ul li a:hover{background:rgba(255,255,255,.2)}
+    .logout{margin-top:20px;text-align:center}
+    .logout a{display:inline-block;padding:10px 20px;background:#ef4444;color:#fff;border-radius:6px;text-decoration:none;font-weight:bold}
+    .logout a:hover{background:#dc2626}
 
     /* Main */
-    .main {
-      margin-left: 240px;
-      padding: 20px;
-      flex: 1;
-    }
+    .main{margin-left:240px;padding:20px;flex:1}
+    .main h1{font-size:26px;color:var(--blue-dark);margin-bottom:10px}
+    .search-bar{margin:15px 0}
+    .search-bar input{padding:10px;width:100%;max-width:400px;border:1px solid #ccc;border-radius:6px}
+    .announcement{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 6px var(--shadow);margin-top:20px}
 
-    .main h1 {
-      font-size: 26px;
-      color: var(--blue-dark);
-      margin-bottom: 10px;
-    }
+    /* Chat */
+    .chat-container{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px var(--shadow);margin-top:20px;max-width:600px}
+    .chat-messages{max-height:300px;overflow-y:auto;border:1px solid #ddd;padding:10px;margin-bottom:10px;border-radius:6px}
+    .chat-message{margin-bottom:8px;padding:6px 10px;border-radius:6px;max-width:80%;word-wrap:break-word}
+    .chat-message span{display:block;font-size:12px;color:gray;margin-top:2px}
+    .chat-message.me{background:#dbeafe;margin-left:auto;text-align:right}
+    .chat-message.other{background:#f1f5f9;text-align:left}
 
-    .search-bar {
-      margin: 15px 0;
-    }
+    .chat-input{display:flex;gap:10px}
+    .chat-input input{flex:1;padding:10px;border:1px solid #ccc;border-radius:6px}
+    .chat-input button{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:6px;cursor:pointer}
+    .chat-input button:hover{background:var(--blue-dark)}
 
-    .search-bar input {
-      padding: 10px;
-      width: 100%;
-      max-width: 400px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .announcement {
-      background: var(--white);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px var(--shadow);
-      margin-top: 20px;
-    }
+    /* Toast */
+    .toast{position:fixed;bottom:20px;left:20px;background:#fff;border:1px solid #e5e7eb;box-shadow:0 8px 20px rgba(0,0,0,.12);
+      padding:10px 14px;border-radius:10px;color:#111;display:none}
+    .toast.show{display:block}
   </style>
 </head>
 <body>
@@ -161,25 +84,118 @@
       <p>Maintenance work will be carried out on end of August.</p>
       <h2>🔔 I'll be Polishing this one PROGRESS.</h2>
     </div>
+
+    <!-- Chat Section -->
+    <div class="chat-container">
+      <h2>💬 Forum Chat</h2>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button id="sendBtn">Send</button>
+      </div>
+    </div>
   </div>
 
+  <!-- Error toast -->
+  <div id="toast" class="toast"></div>
+
 <script>
-// Check if user is logged in
+/* ---------- Auth gate ---------- */
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 if (!currentUser) {
-  // Not logged in → redirect to login page
   window.location.href = "login.html";
 } else {
-  // Display user name
-  document.getElementById("userName").textContent = currentUser.name;
+  document.getElementById("userName").textContent = currentUser.username; // ✅ show username instead of name
 }
 
-// Logout functionality
+/* ---------- Logout ---------- */
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("currentUser");
   window.location.href = "login.html";
 });
-</script>
 
+/* ---------- Supabase client ---------- */
+const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg"; // ⚠️ replace with your anon key
+const { createClient } = window.supabase;
+const sb = createClient(supabaseUrl, supabaseKey);
+
+/* ---------- UI helpers ---------- */
+const toast = document.getElementById("toast");
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+/* ---------- Chat logic ---------- */
+const chatBox = document.getElementById("chatMessages");
+const inputEl = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+
+function renderMessage(msg) {
+  const div = document.createElement("div");
+  const isMe = msg.username === currentUser.username;
+  div.className = `chat-message ${isMe ? "me" : "other"}`;
+
+  const ts = new Date(msg.created_at);
+  const when = ts.toLocaleDateString() + " " + ts.toLocaleTimeString();
+
+  div.innerHTML = `<strong>${msg.username}</strong>: ${msg.message}<span>${when}</span>`;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function loadMessages() {
+  const { data, error } = await sb
+    .from("chat_messages")
+    .select("*")
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    showToast("Failed to load messages");
+    return;
+  }
+
+  chatBox.innerHTML = "";
+  data.forEach(renderMessage);
+}
+
+async function sendMessage() {
+  const message = inputEl.value.trim();
+  if (!message) return;
+
+  const { error } = await sb
+    .from("chat_messages")
+    .insert([{ username: currentUser.username, message }]); // ✅ use username
+
+  if (error) {
+    console.error(error);
+    showToast("Failed to send message");
+    return;
+  }
+  inputEl.value = "";
+}
+
+/* ---------- Events ---------- */
+sendBtn.addEventListener("click", sendMessage);
+inputEl.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+/* ---------- Realtime subscription ---------- */
+sb.channel("chat-room")
+  .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, (payload) => {
+    renderMessage(payload.new);
+  })
+  .subscribe();
+
+/* ---------- Initial load ---------- */
+loadMessages();
+</script>
 </body>
 </html>
