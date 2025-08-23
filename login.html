@@ -30,6 +30,41 @@
 .auth-form .alt-link { margin-top: 1rem; font-size: 0.9rem; color: #555; }
 .auth-form .alt-link a { color: #0077ff; text-decoration: none; font-weight: bold; }
 .auth-form .alt-link a:hover { text-decoration: underline; }
+  
+/* Toast Container */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+}
+
+/* Toast */
+.toast {
+  min-width: 260px;
+  margin-top: 10px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  background: #333;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 0.4s ease-in-out;
+}
+
+/* Show Animation */
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Success & Error styles */
+.toast.success { background: #22c55e; } /* green */
+.toast.error { background: #ef4444; } /* red */
+</style>
 </style>
 </head>
 <body>
@@ -48,7 +83,7 @@
   </nav>
 </header>
 
-<!-- Toast container -->
+
 <div class="toast-container" id="toastContainer"></div>
 
 <main class="container">
@@ -85,14 +120,19 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const form = document.getElementById("loginForm");
 const toastContainer = document.getElementById("toastContainer");
 
-// Toast function
+// Function to show toast
 function showToast(message, type = "success") {
+  const container = document.getElementById("toastContainer");
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
-  toast.innerText = message;
-  toastContainer.appendChild(toast);
+  toast.textContent = message;
 
-  setTimeout(() => toast.classList.add("show"), 100);
+  container.appendChild(toast);
+
+  // Trigger animation
+  setTimeout(() => toast.classList.add("show"), 50);
+
+  // Remove after 3s
   setTimeout(() => {
     toast.classList.remove("show");
     setTimeout(() => toast.remove(), 400);
@@ -111,21 +151,22 @@ form.addEventListener("submit", async (e) => {
     .single();
 
   if (error || !user) {
-    showToast("❌ Invalid email or password!", "error");
-    return;
-  }
+  showToast("❌ Wrong credentials!", "error");
+  return;
+}
 
-  if (user.password !== password) {
-    showToast("❌ Invalid email or password!", "error");
-    return;
-  }
+if (user.password !== password) {
+  showToast("❌ Wrong credentials!", "error");
+  return;
+}
 
-  localStorage.setItem("currentUser", JSON.stringify(user));
-  showToast("✅ Login successful!", "success");
+// Login successful
+localStorage.setItem("currentUser", JSON.stringify(user));
+showToast("✅ Login Successful!", "success");
 
-  setTimeout(() => {
-    window.location.href = "dashboard.html";
-  }, 1200);
+setTimeout(() => {
+  window.location.href = "dashboard.html";
+}, 1500);
 });
 
 // Header scroll effect
@@ -145,6 +186,7 @@ window.addEventListener("scroll", () => {
 </script>
 </body>
 </html>
+
 
 
 
