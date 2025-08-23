@@ -165,8 +165,8 @@ button:hover{background: var(--blue-dark);}
     <label for="contact">Contact Number</label>
     <input type="text" id="contact" name="contact">
 
-    <label for="facebook">Facebook Link</label>
-    <input type="url" id="facebook" name="facebook">
+    <label for="facebook">Facebook Username</label>
+    <input type="text" id="facebook" name="facebook" placeholder="facebook.com/username">
 
     <label for="info">Additional Information</label>
     <textarea id="info" name="info" rows="4"></textarea>
@@ -207,7 +207,7 @@ reportForm.addEventListener('submit', async (e) => {
   const category = document.getElementById('category').value;
   const name = document.getElementById('name').value || 'Anonymous';
   const contact = document.getElementById('contact').value;
-  const facebook = document.getElementById('facebook').value;
+  const facebook = document.getElementById('facebook').value; // username now
   const info = document.getElementById('info').value;
 
   if (!itemImage.files.length) {
@@ -245,7 +245,7 @@ reportForm.addEventListener('submit', async (e) => {
       item_image_url: publicUrl,
       name,
       contact,
-      facebook_link: facebook,
+      facebook_username: facebook, // updated field name
       info
     }]);
 
