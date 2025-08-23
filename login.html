@@ -6,8 +6,17 @@
 <title>Login - CTS E-Lost & Found</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* Auth Form Styling same as before */
-.auth-form { background: #fff; max-width: 420px; width: 100%; margin: 2rem auto; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); text-align: center; }
+/* Auth Form Styling */
+.auth-form {
+  background: #fff;
+  max-width: 420px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
 .auth-form h2 { margin-bottom: 0.5rem; font-size: 1.8rem; color: #222; }
 .auth-form .tagline { margin-bottom: 1.5rem; font-size: 0.95rem; color: #666; }
 .auth-form .form-group { margin-bottom: 1.2rem; text-align: left; }
@@ -43,8 +52,8 @@
     <p class="tagline">Welcome back! Please log in to continue.</p>
 
     <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your CTS email" required>
     </div>
 
     <div class="form-group">
@@ -58,10 +67,16 @@
 </main>
 
 <footer>
-  <p>© 2025 CTS-C E-Lost & Found. All rights reserved.</p>
+  <p>© 2025 CTS E-Lost & Found. All rights reserved.</p>
 </footer>
 
-<script>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 const form = document.getElementById("loginForm");
 
 form.addEventListener("submit", async (e) => {
@@ -69,28 +84,43 @@ form.addEventListener("submit", async (e) => {
   const email = form.email.value.trim();
   const password = form.password.value;
 
-  try {
-    const res = await fetch("http://localhost:5000/login", {  // your server.js login route
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
+  // Query Supabase for user
+  const { data: user, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .single();
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert("❌ " + data.error);
-      return;
-    }
-
-    alert("✅ Login successful!");
-    sessionStorage.setItem("token", data.token); // store JWT
-    window.location.href = "dashboard.html";
-
-  } catch (err) {
-    console.error(err);
-    alert("❌ Something went wrong. Please try again.");
+  if (error || !user) {
+    alert("❌ Invalid email or password!");
+    return;
   }
+
+  // Password check (assuming plain text for now)
+  if (user.password !== password) {
+    alert("❌ Invalid email or password!");
+    return;
+  }
+
+  // Login successful → save user locally (optional)
+  localStorage.setItem("currentUser", JSON.stringify(user));
+
+  alert("✅ Login successful!");
+  window.location.href = "dashboard.html";
+});
+
+// Header scroll effect
+let prevScrollPos = window.pageYOffset;
+const logoTitle = document.querySelector(".logo-title");
+
+window.addEventListener("scroll", () => {
+  let currentScrollPos = window.pageYOffset;
+  if (currentScrollPos > prevScrollPos) {
+    logoTitle.classList.add("hidden");
+  } else {
+    logoTitle.classList.remove("hidden");
+  }
+  prevScrollPos = currentScrollPos;
 });
 </script>
 </body>
