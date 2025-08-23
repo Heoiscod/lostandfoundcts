@@ -48,7 +48,10 @@
   </nav>
 </header>
 
-<main>
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<main class="container">
   <form id="loginForm" class="auth-form">
     <h2>Login to Your Account</h2>
     <p class="tagline">Welcome back! Please log in to continue.</p>
@@ -64,7 +67,7 @@
     </div>
 
     <button type="submit" class="btn primary">Login</button>
-    <p class="alt-link">Don't have an account? <a href="/register">Register here</a></p>
+    <p class="alt-link">Don't have an account? <a href="register.html">Register here</a></p>
   </form>
 </main>
 
@@ -75,16 +78,29 @@
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// Supabase credentials
 const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg"; // keep this safe
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const form = document.getElementById("loginForm");
+const toastContainer = document.getElementById("toastContainer");
+
+// Toast function
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerText = message;
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => toast.classList.add("show"), 100);
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 400);
+  }, 3000);
+}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-
   const email = form.email.value.trim();
   const password = form.password.value;
 
@@ -95,35 +111,41 @@ form.addEventListener("submit", async (e) => {
     .single();
 
   if (error || !user) {
-    alert("❌ Invalid email or password!");
+    showToast("❌ Invalid email or password!", "error");
     return;
   }
 
-  // Password check (plain text for now)
   if (user.password !== password) {
-    alert("❌ Invalid email or password!");
+    showToast("❌ Invalid email or password!", "error");
     return;
   }
 
-  // Save logged-in user locally
   localStorage.setItem("currentUser", JSON.stringify(user));
+  showToast("✅ Login successful!", "success");
 
-  alert("✅ Login successful!");
-  window.location.href = "/dashboard";
+  setTimeout(() => {
+    window.location.href = "dashboard.html";
+  }, 1200);
 });
 
 // Header scroll effect
 let prevScrollPos = window.pageYOffset;
 const logoTitle = document.querySelector(".logo-title");
+
 window.addEventListener("scroll", () => {
-  const currentScrollPos = window.pageYOffset;
-  if (currentScrollPos > prevScrollPos) logoTitle.classList.add("hidden");
-  else logoTitle.classList.remove("hidden");
+  let currentScrollPos = window.pageYOffset;
+  if (currentScrollPos > prevScrollPos) {
+    logoTitle.classList.add("hidden");
+  } else {
+    logoTitle.classList.remove("hidden");
+  }
   prevScrollPos = currentScrollPos;
 });
 </script>
+</script>
 </body>
 </html>
+
 
 
 
