@@ -1,121 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CTS Lost & Found - Dashboard</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CTS Lost & Found - Dashboard</title>
 
-  <!-- Supabase CDN -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<!-- Supabase CDN -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-  <style>
-    :root {
-      --blue:#2563eb; --blue-dark:#1e3a8a; --white:#fff;
-      --gray:#f9fafb; --gray-dark:#6b7280; --shadow:rgba(0,0,0,.15);
-    }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:"Segoe UI",Arial,sans-serif;background:var(--gray);color:#111;min-height:100vh;display:flex;flex-direction:column}
+<style>
+:root {
+  --blue:#2563eb; --blue-dark:#1e3a8a; --white:#fff;
+  --gray:#f9fafb; --gray-dark:#6b7280; --shadow:rgba(0,0,0,.15);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",Arial,sans-serif;background:var(--gray);color:#111;min-height:100vh;display:flex;flex-direction:column}
 
-    .navbar {
+/* Navbar */
+.navbar {
   background: linear-gradient(to right, var(--blue-dark), var(--blue));
   color: var(--white);
   display: flex;
-  flex-direction: column; /* title on top */
+  flex-direction: column;
   align-items: center;
   padding: 12px 20px;
   box-shadow: 0 2px 6px var(--shadow);
-  gap: 12px;
+  gap: 5px;
 }
+.nav-content { width: 100%; max-width: 1000px; display: flex; justify-content: center; }
+.nav-content ul { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
+.nav-content ul li a { color: #fff; text-decoration: none; font-weight: 500; padding: 6px 10px; border-radius: 6px; transition: background .3s; }
+.nav-content ul li a:hover { background: rgba(255,255,255,.2); }
 
-/* Container for nav links + logout button */
-.nav-content {
-  width: 100%;
-  max-width: 1000px;
-  display: flex;
-  justify-content: center; /* links center by default */
-  position: relative; /* needed for positioning logout */
+/* Main */
+.main{padding:20px;flex:1;width:100%;max-width:1000px;margin:auto}
+
+/* Welcome + Logout */
+.welcome-container { display:flex; justify-content: space-between; align-items: center; margin-bottom:20px; }
+.welcome-container h1 { font-size:24px; color: var(--blue-dark); }
+.logout { background: #ef4444; color: #fff; padding: 6px 16px; border-radius: 8px; font-weight: bold; text-decoration: none; transition: background .3s, transform .2s; }
+.logout:hover { background:#dc2626; transform:scale(1.05); }
+
+.search-bar{margin:15px 0}
+.search-bar input{padding:10px;width:100%;max-width:400px;border:1px solid #ccc;border-radius:6px}
+
+/* Announcements Table */
+.announcement{
+  background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 6px var(--shadow); margin-top:20px; overflow-x:auto;
 }
+.announcement table{width:100%; border-collapse:collapse;}
+.announcement th, .announcement td{padding:10px; border-bottom:1px solid #ddd; text-align:left;}
+.announcement th{background:var(--blue); color:#fff; border-radius:6px;}
 
-/* Centered nav links */
-.nav-content ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-  margin: 0;
-  padding: 0;
+/* Chat */
+.chat-container{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px var(--shadow);margin-top:20px;width:100%}
+.chat-messages{max-height:300px;overflow-y:auto;border:1px solid #ddd;padding:10px;margin-bottom:10px;border-radius:6px}
+.chat-message{margin-bottom:8px;padding:6px 10px;border-radius:6px;max-width:80%;word-wrap:break-word}
+.chat-message span{display:block;font-size:12px;color:gray;margin-top:2px}
+.chat-message.me{background:#dbeafe;margin-left:auto;text-align:right}
+.chat-message.other{background:#f1f5f9;text-align:left}
+.chat-input{display:flex;gap:10px}
+.chat-input input{flex:1;padding:10px;border:1px solid #ccc;border-radius:6px}
+.chat-input button{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:6px;cursor:pointer}
+.chat-input button:hover{background:var(--blue-dark)}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:20px;background:#fff;border:1px solid #e5e7eb;box-shadow:0 8px 20px rgba(0,0,0,.12);
+  padding:10px 14px;border-radius:10px;color:#111;display:none}
+.toast.show{display:block}
+
+/* Responsive */
+@media (max-width:600px){
+  .nav-content ul{flex-direction:row;overflow-x:auto;gap:10px;}
 }
-
-/* Links style */
-.nav-content ul li a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: background .3s;
-}
-.nav-content ul li a:hover {
-  background: rgba(255, 255, 255, .2);
-}
-
-/* Logout pinned to the right */
-.logout {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #ef4444;
-  color: #fff;
-  padding: 6px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background .3s, transform .2s;
-}
-.logout:hover {
-  background: #dc2626;
-  transform: translateY(-50%) scale(1.05);
-}
-
-
-
-    /* Main */
-    .main{padding:20px;flex:1;width:100%;max-width:1000px;margin:auto}
-    .main h1{font-size:24px;color:var(--blue-dark);margin-bottom:10px}
-    .search-bar{margin:15px 0}
-    .search-bar input{padding:10px;width:100%;max-width:400px;border:1px solid #ccc;border-radius:6px}
-    .announcement{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 6px var(--shadow);margin-top:20px}
-
-    /* Chat */
-    .chat-container{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px var(--shadow);margin-top:20px;width:100%}
-    .chat-messages{max-height:300px;overflow-y:auto;border:1px solid #ddd;padding:10px;margin-bottom:10px;border-radius:6px}
-    .chat-message{margin-bottom:8px;padding:6px 10px;border-radius:6px;max-width:80%;word-wrap:break-word}
-    .chat-message span{display:block;font-size:12px;color:gray;margin-top:2px}
-    .chat-message.me{background:#dbeafe;margin-left:auto;text-align:right}
-    .chat-message.other{background:#f1f5f9;text-align:left}
-
-    .chat-input{display:flex;gap:10px}
-    .chat-input input{flex:1;padding:10px;border:1px solid #ccc;border-radius:6px}
-    .chat-input button{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:6px;cursor:pointer}
-    .chat-input button:hover{background:var(--blue-dark)}
-
-    /* Toast */
-    .toast{position:fixed;bottom:20px;left:20px;background:#fff;border:1px solid #e5e7eb;box-shadow:0 8px 20px rgba(0,0,0,.12);
-      padding:10px 14px;border-radius:10px;color:#111;display:none}
-    .toast.show{display:block}
-
-    /* Responsive */
-   @media (max-width:600px){
-  .navbar ul{
-    flex-direction: row; /* keep horizontal */
-    overflow-x: auto;    /* allow scrolling if too wide */
-    gap: 10px;           /* optional smaller gap on small screens */
-  }
-}
-  </style>
+</style>
 </head>
 <body>
-  <!-- Navbar -->
+
+<!-- Navbar -->
 <div class="navbar">
   <h2>CTS Lost & Found</h2>
   <div class="nav-content">
@@ -124,137 +86,140 @@
       <li><a href="report.html">Report</a></li>
       <li><a href="support.html">Support</a></li>
     </ul>
-    <a href="#" id="logoutBtn" class="logout">Logout</a>
   </div>
 </div>
 
-
-  <!-- Main -->
-  <div class="main">
+<!-- Main -->
+<div class="main">
+  <div class="welcome-container">
     <h1>Welcome, <span id="userName"></span>!</h1>
+    <a href="#" id="logoutBtn" class="logout">Logout</a>
+  </div>
 
-    <div class="search-bar">
-      <input type="text" placeholder="Search for missing item...">
-    </div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search for missing item...">
+  </div>
 
-    <div class="announcement">
-      <h2>📢 Announcements</h2>
-      <p>Maintenance work will be carried out on end of August.</p>
-      <h2>🔔 I'll be Polishing this one PROGRESS.</h2>
-    </div>
-
-    <!-- Chat Section -->
-    <div class="chat-container">
-      <h2>💬 Forum Chat</h2>
-      <div class="chat-messages" id="chatMessages"></div>
-      <div class="chat-input">
-        <input type="text" id="chatInput" placeholder="Type a message...">
-        <button id="sendBtn">Send</button>
-      </div>
+  <div class="announcement">
+    <h2>📢 Announcements</h2>
+    <div id="announcementsContainer">
+      <table>
+        <thead>
+        
+        </thead>
+        <tbody id="announcementBody">
+        <!-- dynamic rows here -->
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- Error toast -->
-  <div id="toast" class="toast"></div>
+  <!-- Chat Section -->
+  <div class="chat-container">
+    <h2>💬 Forum Chat</h2>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Type a message...">
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
 
 <script>
-/* ---------- Auth gate ---------- */
+/* ---------- Auth ---------- */
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-if (!currentUser) {
-  window.location.href = "login.html";
-} else {
-  document.getElementById("userName").textContent = currentUser.username;
-}
+if(!currentUser){window.location.href="login.html";}
+else{document.getElementById("userName").textContent=currentUser.username;}
 
 /* ---------- Logout ---------- */
-document.getElementById("logoutBtn").addEventListener("click", () => {
+document.getElementById("logoutBtn").addEventListener("click",()=>{
   localStorage.removeItem("currentUser");
-  window.location.href = "login.html";
+  window.location.href="login.html";
 });
 
-/* ---------- Supabase client ---------- */
-const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg"; // ⚠️ replace with real anon key
+/* ---------- Supabase ---------- */
+const supabaseUrl="https://wayiqcnkthghfszchcly.supabase.co";
+const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
 const { createClient } = window.supabase;
 const sb = createClient(supabaseUrl, supabaseKey);
 
-/* ---------- UI helpers ---------- */
-const toast = document.getElementById("toast");
-function showToast(msg) {
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2500);
-}
+/* ---------- Toast ---------- */
+const toast=document.getElementById("toast");
+function showToast(msg){toast.textContent=msg;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2500);}
 
-/* ---------- Chat logic ---------- */
-const chatBox = document.getElementById("chatMessages");
-const inputEl = document.getElementById("chatInput");
-const sendBtn = document.getElementById("sendBtn");
+/* ---------- Chat ---------- */
+const chatBox=document.getElementById("chatMessages");
+const inputEl=document.getElementById("chatInput");
+const sendBtn=document.getElementById("sendBtn");
 
-function renderMessage(msg) {
-  const div = document.createElement("div");
-  const isMe = msg.username === currentUser.username;
-  div.className = `chat-message ${isMe ? "me" : "other"}`;
-
-  const ts = new Date(msg.created_at);
-  const when = ts.toLocaleDateString() + " " + ts.toLocaleTimeString();
-
-  div.innerHTML = `<strong>${msg.username}</strong>: ${msg.message}<span>${when}</span>`;
+function renderMessage(msg){
+  const div=document.createElement("div");
+  div.className=`chat-message ${msg.username===currentUser.username?"me":"other"}`;
+  const ts=new Date(msg.created_at);
+  const when=ts.toLocaleDateString()+" "+ts.toLocaleTimeString();
+  div.innerHTML=`<strong>${msg.username}</strong>: ${msg.message}<span>${when}</span>`;
   chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
+  chatBox.scrollTop=chatBox.scrollHeight;
 }
 
-async function loadMessages() {
-  const { data, error } = await sb
-    .from("chat_messages")
-    .select("*")
-    .order("created_at", { ascending: true });
-
-  if (error) {
-    console.error(error);
-    showToast("Failed to load messages");
-    return;
-  }
-
-  chatBox.innerHTML = "";
+async function loadMessages(){
+  const { data,error }=await sb.from("chat_messages").select("*").order("created_at",{ascending:true});
+  if(error){console.error(error);showToast("Failed to load messages");return;}
+  chatBox.innerHTML="";
   data.forEach(renderMessage);
 }
 
-async function sendMessage() {
-  const message = inputEl.value.trim();
-  if (!message) return;
-
-  const { error } = await sb
-    .from("chat_messages")
-    .insert([{ username: currentUser.username, message }]);
-
-  if (error) {
-    console.error(error);
-    showToast("Failed to send message");
-    return;
-  }
-  inputEl.value = "";
+async function sendMessage(){
+  const message=inputEl.value.trim();
+  if(!message) return;
+  const { error }=await sb.from("chat_messages").insert([{username:currentUser.username,message}]);
+  if(error){console.error(error);showToast("Failed to send message");return;}
+  inputEl.value="";
 }
 
-/* ---------- Events ---------- */
-sendBtn.addEventListener("click", sendMessage);
-inputEl.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    sendMessage();
-  }
-});
+sendBtn.addEventListener("click",sendMessage);
+inputEl.addEventListener("keydown",(e)=>{if(e.key==="Enter"){e.preventDefault();sendMessage();}});
 
-/* ---------- Realtime subscription ---------- */
 sb.channel("chat-room")
-  .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, (payload) => {
-    renderMessage(payload.new);
-  })
+  .on("postgres_changes",{event:"INSERT",schema:"public",table:"chat_messages"},payload=>{renderMessage(payload.new);})
   .subscribe();
 
-/* ---------- Initial load ---------- */
 loadMessages();
+
+/* ---------- Announcements ---------- */
+const announcementBody=document.getElementById("announcementBody");
+
+async function loadAnnouncements(){
+  const { data, error } = await sb.from("announcements")
+    .select("*")
+    .order("created_at",{ascending:false});
+  if(error){console.error(error); showToast("Failed to load announcements"); return;}
+  
+  announcementBody.innerHTML=""; // reset
+  data.forEach(item=>{
+    const tr=document.createElement("tr");
+    const date = new Date(item.created_at).toLocaleDateString();
+    tr.innerHTML=`<td>${item.title}</td><td>${item.body}</td><td>${date}</td>`;
+    announcementBody.appendChild(tr);
+  });
+}
+
+function addAnnouncementItem(item){
+  const tr=document.createElement("tr");
+  const date=new Date(item.created_at).toLocaleDateString();
+  tr.innerHTML=`<td>${item.title}</td><td>${item.body}</td><td>${date}</td>`;
+  announcementBody.prepend(tr);
+}
+
+sb.channel("announcements-channel")
+  .on("postgres_changes",{event:"INSERT",schema:"public",table:"announcements"},payload=>{addAnnouncementItem(payload.new);})
+  .subscribe();
+
+loadAnnouncements();
 </script>
+
 </body>
 </html>
-
