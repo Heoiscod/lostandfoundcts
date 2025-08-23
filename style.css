@@ -28,9 +28,7 @@ body {
   padding-top: 70px; /* space for fixed header */
 }
 
-/* =========================
-   Header
-========================= */
+
 /* =========================
    Header
 ========================= */
@@ -61,6 +59,7 @@ header {
 .logo-title h1 {
   font-size: 18px;
   font-weight: bold;
+  align-self: center;
 }
 
 .logo-title.hidden {
@@ -91,7 +90,6 @@ nav ul li a {
   text-decoration: none;
   font-weight: 500;
   white-space: nowrap;
-  padding: 8px 12px;
   border-radius: 6px;
   transition: all 0.3s ease; /* smooth transition */
 }
@@ -123,7 +121,7 @@ h2 {
   font-size: 28px;
   color: var(--blue-dark);
   margin-bottom: 10px;
-   margin-top: 20px;
+  margin-top: 20px;
 }
 
 .tagline {
@@ -148,7 +146,7 @@ h2 {
 }
 
 .btn.primary:hover {
-  background: var(--accent); /* yellow accent color */
+  background: var(--accent);
 }
 
 .btn.secondary {
