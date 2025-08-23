@@ -12,6 +12,7 @@
       --gray: #f9fafb;
       --gray-dark: #6b7280;
       --shadow: rgba(0, 0, 0, 0.116);
+      --accent: #fbbf24;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: "Segoe UI", Arial, sans-serif; background: var(--gray); color: #111; line-height: 1.6; padding-top: 70px; }
@@ -22,7 +23,21 @@
     .logo-title.hidden { opacity: 0; height: 0; overflow: hidden; padding: 0 30px; }
     nav { background: rgba(0,0,0,0.1); padding: 10px 20px; }
     nav ul { list-style: none; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-    nav ul li a { color: var(--white); text-decoration: none; font-weight: 500; }
+    nav ul li a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: 6px;
+  transition: all 0.3s ease; /* smooth transition */
+}
+nav ul li a:hover {
+  background: var(--accent); /* yellow accent color */
+  color: var(--blue-dark);    /* text color change */
+  transform: scale(1.05);     /* slight zoom effect */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
     main.container { max-width: 500px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px var(--shadow); text-align: left; }
     main.container h2 { text-align: center; font-size: 28px; color: var(--blue-dark); margin-bottom: 20px; }
     form label { display: block; font-weight: 600; margin-bottom: 5px; color: var(--blue-dark); }
