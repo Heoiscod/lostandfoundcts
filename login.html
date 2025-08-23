@@ -6,12 +6,35 @@
 <title>Login - CTS E-Lost & Found</title>
 <link rel="stylesheet" href="style.css">
 <style>
+/* Header + Navigation */
+header {
+  background: linear-gradient(to right, #1e3a8a, #2563eb);
+  color: #fff;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 30px;
+  transition: all 0.3s;
+}
+.logo-title img { height: 40px; }
+.logo-title.hidden { opacity: 0; height: 0; overflow: hidden; padding: 0 30px; }
+nav ul { list-style: none; display: flex; gap: 20px; justify-content: center; padding: 10px 0; margin: 0; }
+nav ul li a { color: #fff; text-decoration: none; font-weight: 500; border-radius: 6px; padding: 6px 10px; transition: all 0.3s; }
+nav ul li a:hover { background: #fbbf24; color: #1e3a8a; transform: scale(1.05); }
+
 /* Auth Form Styling */
 .auth-form {
   background: #fff;
   max-width: 420px;
   width: 100%;
-  margin: 2rem auto;
+  margin: 120px auto 2rem auto;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
@@ -28,6 +51,16 @@
 .auth-form .alt-link { margin-top: 1rem; font-size: 0.9rem; color: #555; }
 .auth-form .alt-link a { color: #0077ff; text-decoration: none; font-weight: bold; }
 .auth-form .alt-link a:hover { text-decoration: underline; }
+
+/* Footer */
+footer {
+  background: #1e3a8a;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+  font-size: 14px;
+}
 </style>
 </head>
 <body>
@@ -38,15 +71,15 @@
   </div>
   <nav>
     <ul>
-       <li><a href="/index">Home</a></li>
-        <li><a href="/search">Search Items</a></li>
-        <li><a href="/login">Login</a></li> 
-        <li><a href="/register">Register</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/search">Search Items</a></li>
+      <li><a href="/login" class="active">Login</a></li>
+      <li><a href="/register">Register</a></li>
     </ul>
   </nav>
 </header>
 
-<main class="container">
+<main>
   <form id="loginForm" class="auth-form">
     <h2>Login to Your Account</h2>
     <p class="tagline">Welcome back! Please log in to continue.</p>
@@ -62,7 +95,7 @@
     </div>
 
     <button type="submit" class="btn primary">Login</button>
-    <p class="alt-link">Don't have an account? <a href="register.html">Register here</a></p>
+    <p class="alt-link">Don't have an account? <a href="/register">Register here</a></p>
   </form>
 </main>
 
@@ -73,6 +106,7 @@
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+// Supabase credentials
 const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg";
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -81,10 +115,10 @@ const form = document.getElementById("loginForm");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const email = form.email.value.trim();
   const password = form.password.value;
 
-  // Query Supabase for user
   const { data: user, error } = await supabase
     .from("users")
     .select("*")
@@ -96,34 +130,28 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Password check (assuming plain text for now)
+  // Password check (plain text for now)
   if (user.password !== password) {
     alert("❌ Invalid email or password!");
     return;
   }
 
-  // Login successful → save user locally (optional)
+  // Save logged-in user locally
   localStorage.setItem("currentUser", JSON.stringify(user));
 
   alert("✅ Login successful!");
-  window.location.href = "dashboard.html";
+  window.location.href = "/dashboard";
 });
 
 // Header scroll effect
 let prevScrollPos = window.pageYOffset;
 const logoTitle = document.querySelector(".logo-title");
-
 window.addEventListener("scroll", () => {
-  let currentScrollPos = window.pageYOffset;
-  if (currentScrollPos > prevScrollPos) {
-    logoTitle.classList.add("hidden");
-  } else {
-    logoTitle.classList.remove("hidden");
-  }
+  const currentScrollPos = window.pageYOffset;
+  if (currentScrollPos > prevScrollPos) logoTitle.classList.add("hidden");
+  else logoTitle.classList.remove("hidden");
   prevScrollPos = currentScrollPos;
 });
 </script>
 </body>
 </html>
-
-
