@@ -9,17 +9,19 @@
 <body>
   
   <header>
+    <!-- Logo + Title -->
     <div class="logo-title">
       <img src="images/logo.webp" alt="CTS Logo">
       <h1>CTS E-Lost & Found</h1>
     </div>
 
+    <!-- Navigation -->
     <nav>
       <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/search">Search Items</a></li>
-        <li><a href="/login">Login</a></li> 
-        <li><a href="/register">Register</a></li>
+        <li><a href="/search.html">Search Items</a></li>
+        <li><a href="/login.html">Login</a></li> 
+        <li><a href="/register.html">Register</a></li>
       </ul>
     </nav>
   </header>
@@ -30,11 +32,60 @@
     <p class="tagline">Connecting our CTS-C community through lost and found items</p>
 
     <div class="cta-buttons">
-      <a href="/search" class="btn primary">Search Items</a>
-      <a href="/register" class="btn secondary">Get Started</a>
+      <a href="/search.html" class="btn primary">Search Items</a>
+      <a href="/register.html" class="btn secondary">Get Started</a>
     </div>
 
-    <!-- Stats, How It Works, Join sections remain the same -->
+    <section class="stats">
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Total Items</p>
+      </div>
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Lost Items</p>
+      </div>
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Found Items</p>
+      </div>
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Items Returned</p>
+      </div>
+    </section>
+
+    <section class="empty">
+      <p><strong>No Items Posted Yet</strong></p>
+      <p>Be the first to help the Texians community by reporting a lost or found item!</p>
+    </section>
+
+    <section class="how-it-works">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <h3>1</h3>
+          <p><strong>Report Item</strong><br>Found something or lost an item? Create an account and report it with details and photos.</p>
+        </div>
+        <div class="step">
+          <h3>2</h3>
+          <p><strong>Search & Connect</strong><br>Browse through posted items and connect with other CTS-C community members.</p>
+        </div>
+        <div class="step">
+          <h3>3</h3>
+          <p><strong>Reunite Items</strong><br>Message item owners to arrange safe return and help reunite items with their owners.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="join">
+      <h2>Join the CTS-C Community</h2>
+      <p>Help your fellow students and staff by joining our digital lost and found community.</p>
+      <div class="cta-buttons">
+        <a href="/register" class="btn primary">Create Account</a>
+        <a href="/login" class="btn secondary">Login</a>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -48,8 +99,10 @@
     window.addEventListener("scroll", () => {
       let currentScrollPos = window.pageYOffset;
       if (currentScrollPos > prevScrollPos) {
+        // scrolling down → hide logo/title
         logoTitle.classList.add("hidden");
       } else {
+        // scrolling up → show logo/title
         logoTitle.classList.remove("hidden");
       }
       prevScrollPos = currentScrollPos;
