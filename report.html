@@ -14,30 +14,34 @@
       --shadow: rgba(0, 0, 0, 0.1);
     }
     body {
-      margin: 0px;
-    display: flex;
+  margin: 0; /* ✅ remove default body margin */
+  display: flex;
   flex-direction: column;
   font-family: "Segoe UI", Arial, sans-serif;
   background: url('images/background.gif') no-repeat center center fixed;
   background-size: cover;
   color: #111;
   line-height: 1.6;
-    }
-    header {
-     background: linear-gradient(to right, var(--blue-dark), var(--blue));
-      color: var(--white);
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.4rem;
-      font-weight: bold;
-    }
-    nav {
-       background: linear-gradient(to right, var(--blue-dark), var(--blue));
-      padding: 0.75rem;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-    }
+}
+
+header {
+   background: linear-gradient(to right, var(--blue-dark), var(--blue));
+  color: var(--white);
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0; /* ✅ remove gap under header */
+}
+
+nav {
+   background: linear-gradient(to right, var(--blue-dark), var(--blue));
+  padding: 0.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 0; /* ✅ no extra spacing above/below */
+}
     nav a {
       color: var(--white);
       text-decoration: none;
@@ -46,7 +50,7 @@
     main {
       flex: 1;
       padding: 2rem;
-      width: 600px;
+      max-width: 600px;
       margin: auto;
       margin-top: 25px;
       background: var(--white);
@@ -116,6 +120,9 @@
   }
   .toast.success { background: #28a745; }
   .toast.error { background: #dc3545; }
+  @media (max-width:600px){
+  .nav-content ul{flex-direction:row;overflow-x:auto;gap:10px;}
+}
   </style>
 </head>
 <body>
