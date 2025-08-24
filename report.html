@@ -14,15 +14,17 @@
       --shadow: rgba(0, 0, 0, 0.1);
     }
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: var(--gray);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      margin: 0px;
+    display: flex;
+  flex-direction: column;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: url('images/background.gif') no-repeat center center fixed;
+  background-size: cover;
+  color: #111;
+  line-height: 1.6;
     }
     header {
-      background: var(--blue);
+     background: linear-gradient(to right, var(--blue-dark), var(--blue));
       color: var(--white);
       padding: 1rem;
       text-align: center;
@@ -30,7 +32,7 @@
       font-weight: bold;
     }
     nav {
-      background: var(--blue-dark);
+       background: linear-gradient(to right, var(--blue-dark), var(--blue));
       padding: 0.75rem;
       display: flex;
       justify-content: center;
@@ -41,25 +43,15 @@
       text-decoration: none;
       font-weight: bold;
     }
-    #connectionStatus {
-      text-align: center;
-      padding: 0.5rem;
-      font-weight: bold;
-      background: #f3f4f6;
-      border-bottom: 1px solid #ddd;
-    }
     main {
       flex: 1;
       padding: 2rem;
-      max-width: 700px;
+      width: 600px;
       margin: auto;
+      margin-top: 25px;
       background: var(--white);
       box-shadow: 0 2px 6px var(--shadow);
       border-radius: 8px;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 1rem;
     }
     form {
       display: flex;
@@ -94,6 +86,36 @@
       display: none;
       border-radius: 6px;
     }
+
+    /* Toast Styles (Centered) */
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #333;
+    color: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    display: none;
+    text-align: center;
+    font-size: 16px;
+    z-index: 9999;
+    max-width: 80%;
+    line-height: 1.5em;
+  }
+  .toast.show {
+    display: block;
+    animation: fadeInOut 3s ease;
+  }
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -60%); }
+    10%, 90% { opacity: 1; transform: translate(-50%, -50%); }
+    100% { opacity: 0; transform: translate(-50%, -40%); }
+  }
+  .toast.success { background: #28a745; }
+  .toast.error { background: #dc3545; }
   </style>
 </head>
 <body>
@@ -103,11 +125,8 @@
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="report.html">Report</a>
-    <a href="search.html">Search</a>
     <a href="logout.html">Logout</a>
   </nav>
-
-  <div id="connectionStatus">🔄 Checking Supabase connection...</div>
 
   <main>
     <h2>Report Missing Item</h2>
@@ -144,6 +163,8 @@
     <div class="announcement" id="announcementBox">
       📢 Announcement will appear here...
     </div>
+
+    <div id="toast"></div>
   </main>
 
 <script>
@@ -152,11 +173,26 @@ const supabaseUrl = "https://wayiqcnkthghfszchcly.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndheWlxY25rdGhnaGZzemNoY2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTU0NjMsImV4cCI6MjA3MTQ3MTQ2M30.f-_3WucFAEaVogJGkLuwon0V-rAAuRlQjcpA8jF-tcg"; // replace with anon key
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-  const statusBox = document.getElementById("connectionStatus");
   const form = document.getElementById("reportForm");
   const itemImage = document.getElementById("itemImage");
   const preview = document.getElementById("preview");
   const announcementBox = document.getElementById("announcementBox");
+  const toast = document.getElementById("toast");
+
+  // ✅ Toast function
+  function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+    toast.className = "toast " + type;
+    toast.innerHTML = `
+      <b>Reported Item Successfully!</b><br>
+      ${message}
+    `;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3000);
+  }
 
   // ✅ Preview uploaded image
   itemImage.addEventListener("change", () => {
@@ -167,28 +203,13 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
     }
   });
 
-  // ✅ Check Supabase connection
-  async function checkConnection() {
-    try {
-      const { error } = await supabase.from("announcements").select("id").limit(1);
-      if (error) throw error;
-      statusBox.textContent = "✅ Connected to Supabase";
-      statusBox.style.color = "green";
-    } catch (err) {
-      console.error(err);
-      statusBox.textContent = "❌ Not connected to Supabase";
-      statusBox.style.color = "red";
-    }
-  }
-  checkConnection();
-
   // ✅ Submit report
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const file = itemImage.files[0];
     if (!file) {
-      alert("Please select an image file.");
+      showToast("⚠️ Please select an image file.", "error");
       return;
     }
 
@@ -206,7 +227,7 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
     if (uploadError) {
       console.error("Upload failed:", uploadError);
-      alert("❌ Failed to upload image.");
+      showToast("❌ Failed to upload image.", "error");
       return;
     }
 
@@ -218,25 +239,23 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
     const publicUrl = urlData.publicUrl;
 
-    // Save to database (reports_table)
-    const { error: insertError } = await supabase.from("reports_table").insert([
-      {
-        category: document.getElementById("category").value,
-        image_url: publicUrl,
-        name: document.getElementById("name").value || null,
-        contact: document.getElementById("contact").value,
-        facebook: document.getElementById("facebook").value,
-        info: document.getElementById("info").value
-      }
-    ]);
+    // Save to database
+    const { error: insertError } = await supabase.from("reports_table").insert([{
+      category: document.getElementById("category").value,
+      image_url: publicUrl,
+      name: document.getElementById("name").value || "Anonymous",
+      contact: document.getElementById("contact").value,
+      facebook: document.getElementById("facebook").value,
+      info: document.getElementById("info").value
+    }]);
 
     if (insertError) {
       console.error("Insert failed:", insertError);
-      alert("❌ Failed to save report in database.");
+      showToast("❌ Failed to save report in database.", "error");
       return;
     }
 
-    alert("✅ Report submitted successfully!");
+    showToast("✅ Thank You! for being a Good Samaritan!", "success");
     form.reset();
     preview.style.display = "none";
   });
