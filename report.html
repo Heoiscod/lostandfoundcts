@@ -17,22 +17,21 @@
   --gray-dark:#6b7280;
   --shadow:rgba(0,0,0,.15);
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
+
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
   font-family:"Segoe UI",Arial,sans-serif;
   background: url('images/background.gif') no-repeat center center fixed;
   background-size: cover;
   color:#111;
-  display:flex;
-  flex-direction:column;
   min-height:100vh;
-  padding-top:70px; /* space for fixed navbar */
 }
 
 /* Navbar */
 .navbar{
   position:fixed;
   top:0;
+  left:0;
   width:100%;
   background: linear-gradient(to right, var(--blue-dark), var(--blue));
   color: var(--white);
@@ -41,8 +40,10 @@ body{
   align-items:center;
   padding:12px 20px;
   box-shadow:0 2px 6px var(--shadow);
-  gap:5px;
   z-index:1000;
+}
+.navbar h2 {
+  margin-bottom:8px;
 }
 .nav-content{
   width:100%;
@@ -54,6 +55,8 @@ body{
   list-style:none;
   display:flex;
   gap:20px;
+  padding:0;
+  margin:0;
 }
 .nav-content ul li a{
   color:#fff;
@@ -69,21 +72,32 @@ body{
 
 /* Main content */
 .main{
-  flex:1;
   width:100%;
   max-width:600px;
-  margin:20px auto 40px auto;
+  margin:120px auto 40px auto; /* margin-top to clear navbar */
   padding:20px;
   background: var(--white);
   border-radius:10px;
   box-shadow:0 2px 6px var(--shadow);
-  margin-top: 100px;
 }
 
 /* Form */
-h2{text-align:center;color:var(--blue-dark);margin-bottom:20px;}
-label{display:block;margin:10px 0 5px;font-weight:bold;}
-input, select, textarea, button{width:100%;padding:10px;border-radius:6px;border:1px solid #ddd;margin-bottom:15px;}
+h2{
+  text-align:center;
+  color:white;
+  margin-bottom:20px;
+}
+label{
+  display:block;margin:10px 0 5px;
+  font-weight:bold;
+}
+input, select, textarea, button{
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ddd;
+  margin-bottom:15px;
+}
 textarea{resize:vertical;}
 button{
   background: var(--blue);
@@ -123,7 +137,22 @@ button:hover{background: var(--blue-dark);}
 
 /* Responsive */
 @media (max-width:600px){
-  .nav-content ul{flex-direction:row;overflow-x:auto;gap:10px;}
+  .nav-content ul {
+    flex-direction: row;
+    flex-wrap: wrap;      /* allow items to wrap */
+    justify-content: center; /* center items */
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-content ul li {
+    margin: 0; /* remove any default li spacing */
+  }
+
+  .nav-content ul li a {
+    white-space: nowrap; /* prevent wrapping of text */
+  }
 }
 </style>
 </head>
@@ -166,7 +195,7 @@ button:hover{background: var(--blue-dark);}
     <input type="text" id="contact" name="contact">
 
     <label for="facebook">Facebook Username</label>
-    <input type="text" id="facebook" name="facebook" placeholder="facebook.com/username">
+    <input type="text" id="facebook" name="facebook" placeholder="e.g., john.doe">
 
     <label for="info">Additional Information</label>
     <textarea id="info" name="info" rows="4"></textarea>
@@ -185,7 +214,6 @@ const reportForm = document.getElementById('reportForm');
 const itemImage = document.getElementById('itemImage');
 const preview = document.getElementById('preview');
 
-// Show preview when file selected
 itemImage.addEventListener('change', e => {
   const file = e.target.files[0];
   if(file){
@@ -207,7 +235,7 @@ reportForm.addEventListener('submit', async (e) => {
   const category = document.getElementById('category').value;
   const name = document.getElementById('name').value || 'Anonymous';
   const contact = document.getElementById('contact').value;
-  const facebook = document.getElementById('facebook').value; // username now
+  const facebook = document.getElementById('facebook').value;
   const info = document.getElementById('info').value;
 
   if (!itemImage.files.length) {
@@ -218,7 +246,6 @@ reportForm.addEventListener('submit', async (e) => {
   const file = itemImage.files[0];
   const fileName = `${Date.now()}_${file.name}`;
 
-  // Upload image to Supabase storage
   const { data: uploadData, error: uploadError } = await supabase
     .storage
     .from('reports')
@@ -230,14 +257,12 @@ reportForm.addEventListener('submit', async (e) => {
     return;
   }
 
-  // Get public URL
   const { data: urlData } = supabase
     .storage
     .from('reports')
     .getPublicUrl(`images/${fileName}`);
   const publicUrl = urlData.publicUrl;
 
-  // Insert report into database
   const { data, error } = await supabase
     .from('reports')
     .insert([{
@@ -245,7 +270,7 @@ reportForm.addEventListener('submit', async (e) => {
       item_image_url: publicUrl,
       name,
       contact,
-      facebook_username: facebook, // updated field name
+      facebook_username: facebook,
       info
     }]);
 
