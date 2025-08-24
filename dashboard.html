@@ -80,7 +80,22 @@ body {
 
 /* Responsive */
 @media (max-width:600px){
-  .nav-content ul{flex-direction:row;overflow-x:auto;gap:10px;}
+  .nav-content ul {
+    flex-direction: row;
+    flex-wrap: wrap;      /* allow items to wrap */
+    justify-content: center; /* center items */
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-content ul li {
+    margin: 0; /* remove any default li spacing */
+  }
+
+  .nav-content ul li a {
+    white-space: nowrap; /* prevent wrapping of text */
+  }
 }
 </style>
 </head>
@@ -232,3 +247,4 @@ loadAnnouncements();
 
 </body>
 </html>
+
