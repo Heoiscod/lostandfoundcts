@@ -13,7 +13,7 @@
       --white: #ffffff;
       --shadow: rgba(0, 0, 0, 0.1);
     }
-    body {
+ body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
     background: url('images/background.gif') no-repeat center center fixed;
@@ -48,11 +48,6 @@
     font-weight: bold;
     white-space: nowrap; /* ✅ keep links in one line */
   }
-    nav a {
-      color: var(--white);
-      text-decoration: none;
-      font-weight: bold;
-    }
     main {
       flex: 1;
       padding: 2rem;
@@ -126,16 +121,9 @@
   }
   .toast.success { background: #28a745; }
   .toast.error { background: #dc3545; }
-@media (max-width: 600px) {
-    nav {
-      overflow-x: auto;
-      justify-content: flex-start;
-      gap: 1rem;
-    }
-    nav::-webkit-scrollbar {
-      display: none; /* Hide scrollbar for cleaner look */
-    }
-  }
+  @media (max-width:600px){
+  .nav-content ul{flex-direction:row;overflow-x:auto;gap:10px;}
+}
   </style>
 </head>
 <body>
@@ -297,4 +285,3 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 </body>
 </html>
-
